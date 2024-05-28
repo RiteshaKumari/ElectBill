@@ -193,6 +193,7 @@
     <Content Include="bin\System.Web.WebPages.xml" />
     <Content Include="bin\WebGrease.dll" />
     <Content Include="Content\Cust_css\Index.css" />
+    <Content Include="Content\Cust_css\navbar.css" />
     <Content Include="Content\Cust_img\fav_gif.gif" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
