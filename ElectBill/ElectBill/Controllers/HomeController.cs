@@ -15,6 +15,11 @@ namespace ElectBill.Controllers
         {
             return View();
         }
+        [Route("loginSignup")]
+        public ActionResult loginSignup()
+        {
+            return View();
+        }
 
         public ActionResult About()
         {

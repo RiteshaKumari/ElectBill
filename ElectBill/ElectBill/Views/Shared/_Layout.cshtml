@@ -8,7 +8,7 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     <style>
-        * {
+        *{
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -20,12 +20,16 @@
     <header>
         <nav class="nav">
             <ul class="menu">
-                <li class="logo"><a href="#">myElectBILL</a></li>
-                <li class="item"><a href="#">Home</a></li>
-                <li class="item"><a href="#">About</a></li>
-                <li class="item"><a href="#">Services</a></li>
+                <li class="logo"><a href="#">myLibrary</a></li>
+                <li class="item">
+                    @Html.ActionLink("loginSignup", "loginSignup", "Home")</li>
+                    @*  <li class="item"><a href="/loginSignup.cshtml">loginSignup</a></li>*@
+<li class="item">
+                @Html.ActionLink("View Bill", "Index", "EBill")</li>
+            <li class="item"> @Html.ActionLink("Create Bill", "CreateBill", "EBill")</li>
 
-                <li class="item button"><a href="#">Log In</a></li>
+
+<li class="item button"><a href="#">Log In</a></li>
                 <li class="item button secondary"><a href="#">Sign Up</a></li>
                 <li class="toggle"><span class="bars"></span></li>
             </ul>
@@ -33,7 +37,7 @@
     </header>
     <div>
         @RenderBody()
-        <hr />
+      
         <footer>
             @*<p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>*@
         </footer>
