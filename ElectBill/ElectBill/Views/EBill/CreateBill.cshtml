@@ -1,7 +1,270 @@
-﻿
-@{
-    ViewBag.Title = "CreateBill";
+﻿@model ElectBill.Models.BillDetail
+
+<style>
+    .head{
+        text-align:center;
+    }
+    input[type=text], select, textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: vertical;
 }
 
-<h2>CreateBill</h2>
+label {
+  padding: 12px 12px 12px 0;
+  display: inline-block;
+}
 
+input[type=submit] {
+  background-color: #04AA6D;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  float: right;
+}
+
+input[type=submit]:hover {
+  background-color: #45a049;
+}
+
+.CreateBcontainer {
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px;
+}
+
+.col-25 {
+  float: left;
+  width: 25%;
+  margin-top: 6px;
+}
+
+.col-75 {
+  float: left;
+  width: 75%;
+  margin-top: 6px;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */
+@@media screen and (max-width: 600px) {
+  .col-25, .col-75, input[type=submit] {
+    width: 100%;
+    margin-top: 0;
+  }
+}
+    table, th, td {
+        margin-top:10px;
+        border: 1px solid #ccc;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        padding: 10px;
+    }
+    #alter{
+        width:100%;
+    }
+    table#alter tr:nth-child(even) {
+        background-color: #eee;
+    }
+
+    table#alter tr:nth-child(odd) {
+        background-color: #fff;
+    }
+
+    table#alter th {
+        color: white;
+        background-color: gray;
+    }
+    .itemhead {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 34px;
+    }
+
+    .addbtn {
+        display: inline-block;
+        outline: 0;
+        border: 0;
+        cursor: pointer;
+        will-change: box-shadow, transform;
+        background: radial-gradient(100% 100% at 100% 0%, #89E5FF 0%, #5468FF 100%);
+        box-shadow: 0px 2px 4px rgb(45 35 66 / 40%), 0px 7px 13px -3px rgb(45 35 66 / 30%), inset 0px -3px 0px rgb(58 65 111 / 50%);
+        padding: 10px 14px 5px 14px;
+        border-radius: 6px;
+        color: #fff;
+        height: 38px;
+        font-size: 16px;
+        text-shadow: 0 1px 0 rgb(0 0 0 / 40%);
+        transition: box-shadow 0.15s ease, transform 0.15s ease;
+    }
+        .addbtn:hover {
+            box-shadow: 0px 4px 8px rgb(45 35 66 / 40%), 0px 7px 13px -3px rgb(45 35 66 / 30%), inset 0px -3px 0px #3c4fe0;
+            transform: translateY(-2px);
+        }
+
+        .addbtn:active {
+            box-shadow: inset 0px 3px 7px #3c4fe0;
+            transform: translateY(2px);
+        }
+   
+
+    .popdesign {
+         padding: 20px;
+        background: #27292d;
+        color: #fff;
+        width: 40%;
+        height: fit-content;
+        overflow: auto;
+        position: fixed;
+        inset: 0;
+        margin: auto;
+        border-radius: 5px;
+        transform: scale(0);
+        transition: transform 0.6s ease-in-out;
+        z-index: 10;
+    }
+    .overlay {
+        position: fixed;
+        display: none;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(20, 30, 90, .8);
+        transition: .6s;
+        z-index: 2;
+        cursor: pointer;
+    }
+    .CreateBcontainer{
+        width:80%;
+        margin:0 auto;
+    }
+</style>
+
+
+
+<div class="CreateBcontainer">
+    <h1 class="head">Create Bill</h1>
+    <form action="/action_page.php">
+        <div class="row">
+            <div class="col-25">
+                <label for="fname">Customer Name</label>
+            </div>
+            <div class="col-75">
+                <input type="text" id="fname" name="firstname" placeholder="Customer Name">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-25">
+                <label for="lname">Mobile</label>
+            </div>
+            <div class="col-75">
+                <input type="text" id="lname" name="lastname" placeholder="Mobile">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-25">
+                <label for="lname">Address</label>
+            </div>
+            <div class="col-75">
+                <input type="text" id="lname" name="lastname" placeholder="Address">
+            </div>
+        </div>
+        @*<div class="row">
+                <div class="col-25">
+                    <label for="country">Country</label>
+                </div>
+                <div class="col-75">
+                    <select id="country" name="country">
+                        <option value="australia">Australia</option>
+                        <option value="canada">Canada</option>
+                        <option value="usa">USA</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-25">
+                    <label for="subject">Subject</label>
+                </div>
+                <div class="col-75">
+                    <textarea id="subject" name="subject" placeholder="Write something.." style="height:200px"></textarea>
+                </div>
+            </div>*@
+        <div class="itemhead">
+            <h2>Items</h2>
+            <div class="addbtn" onclick="popup()">Add Product</div>
+        </div>
+        <table id="alter">
+            <tr><th>First_Name</th><th>Last_Name</th><th>Marks</th></tr>
+            <tr><td>Sonoo</td><td>Jaiswal</td><td>60</td></tr>
+            <tr><td>James</td><td>William</td><td>80</td></tr>
+            <tr><td>Swati</td><td>Sironi</td><td>82</td></tr>
+            <tr><td>Chetna</td><td>Singh</td><td>72</td></tr>
+        </table>
+        <div class="row" style="margin-top:20px;">
+            <button class="addbtn">Save</button>
+        </div>
+    </form>
+
+    <div class="overlay" onclick="off()"></div>
+    <div class="popcontainer" onclick="off()"></div>
+    <form action="/action_page.php" class="popdesign">
+        <div class="row">
+            <div class="col-25">
+                <label for="fname">Product Name</label>
+            </div>
+            <div class="col-75">
+                <input type="text" id="fname" name="firstname" placeholder="Product Name">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-25">
+                <label for="lname">Price</label>
+            </div>
+            <div class="col-75">
+                <input type="text" id="lname" name="lastname" placeholder="Price">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-25">
+                <label for="lname">Quantity</label>
+            </div>
+            <div class="col-75">
+                <input type="text" id="lname" name="lastname" placeholder="Quantity">
+            </div>
+        </div>
+        <div class="row" style="margin-top:20px;">
+            <button class="addbtn" onclick="closepop()">Save</button>
+        </div>
+    </form>
+</div>
+<script>
+
+    function closepop() {
+        document.querySelector(".popdesign").style.transform = "scale(0)"
+        document.querySelector('.overlay').style.display = "none"
+    }
+
+    function off() {
+        document.querySelector(".popdesign").style.transform = "scale(0)"
+        document.querySelector('.overlay').style.display = "none"
+    }
+    function popup() {
+        document.querySelector(".popdesign").style.transform = "scale(1)"
+        document.querySelector('.overlay').style.display = "block"
+    }
+</script>
