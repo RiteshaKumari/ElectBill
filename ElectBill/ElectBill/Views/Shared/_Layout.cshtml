@@ -5,36 +5,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - My ASP.NET Application</title>
     <link rel="icon" type="image/x-icon" href="~/Content/Cust_img/fav_gif.gif">
-    @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+
+
     <style>
-        *{
+        * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        .container{
-            width:80%;
-            margin:0px auto;
-            
+
+        .container {
+            width: 80%;
+            margin: 0px auto;
         }
     </style>
     <link href="~/Content/Cust_css/navbar.css" rel="stylesheet" />
 </head>
-<body >
+<body>
     <header>
         <nav class="nav">
             <ul class="menu">
                 <li class="logo"><a href="#">myLibrary</a></li>
                 <li class="item">
-                    @Html.ActionLink("loginSignup", "loginSignup", "Home")</li>
-                    @*  <li class="item"><a href="/loginSignup.cshtml">loginSignup</a></li>*@
-<li class="item">
-                @Html.ActionLink("View Bill", "Index", "EBill")</li>
-            <li class="item"> @Html.ActionLink("Create Bill", "CreateBill", "EBill")</li>
+                    @Html.ActionLink("loginSignup", "loginSignup", "Home")
+                </li>
+                @*  <li class="item"><a href="/loginSignup.cshtml">loginSignup</a></li>*@
+                <li class="item">
+                    @Html.ActionLink("View Bill", "Index", "EBill")
+                </li>
+                <li class="item"> @Html.ActionLink("Create Bill", "CreateBill", "EBill")</li>
 
 
-<li class="item button"><a href="#">Log In</a></li>
+                <li class="item button"><a href="#">Log In</a></li>
                 @*<li class="item button secondary"><a href="#">Sign Up</a></li>*@
                 <li class="toggle"><span class="bars"></span></li>
             </ul>
@@ -42,14 +47,12 @@
     </header>
     <div>
         @RenderBody()
-      
+
         <footer>
             @*<p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>*@
         </footer>
     </div>
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-            integrity="sha256-pasqAKBDmFT4eHoN2ndd6lN370kFiGUFyTiUHWhU7k8="
-            crossorigin="anonymous"></script>
+   
     <script>
         $(function () {
             $(".toggle").on("click", function () {

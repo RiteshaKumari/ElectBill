@@ -1,0 +1,20 @@
+﻿@* it is a partial view *@
+
+@model ElectBill.Models.Items
+
+<tr id="@Model.Item_Index">
+    <td>
+        @Model.Prod_Name
+       <input type="hidden" name="Items[@Model.Item_Index].Prod_Name" value="@Model.Prod_Name"/>
+    </td>
+
+    <td>
+        @Model.Price
+        <input type="hidden" name="Items[@Model.Item_Index].Price" value="@Model.Price"/>
+    </td>
+    <td>
+        @Model.Quantity
+        <input type="hidden" name="Items[@Model.Item_Index].Quantity" value="@Model.Quantity"/>
+    </td>
+    <td><button type="button">Remove</button></td>
+</tr>

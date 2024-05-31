@@ -10,6 +10,9 @@ namespace ElectBill.Models
 {
     public class Utility
     {
+        
+
+      
         const string dbo_schema = "admin_kashishdb";//---------????????????
         private static object lockObject = new object();
         string CS = string.Empty;
