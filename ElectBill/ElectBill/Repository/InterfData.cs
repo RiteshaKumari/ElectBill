@@ -12,5 +12,9 @@ namespace ElectBill.Repository
     {
         void SaveBillDetails(BillDetail details);
         void SaveBillItems(List<Items> items, SqlConnection con, int id);
+
+        List<BillDetail> GetAllDetails();  
+
+        BillDetail GetoneBillDetail(int id);
     }
 }

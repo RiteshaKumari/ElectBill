@@ -14,7 +14,9 @@ namespace ElectBill.Controllers
         // GET: EBill
         public ActionResult Index()
         {
-            return View();
+            Data data = new Data();
+            var list = data.GetAllDetails();
+            return View(list);
         }
         public ActionResult CreateBill()
         {
@@ -34,6 +36,13 @@ namespace ElectBill.Controllers
         public ActionResult CreateItem(Items item)
         {
             return PartialView("_CreateItem", item);
+        }
+
+        public ActionResult ViewBill(int id)
+        {
+            Data data = new Data();
+           var details = data.GetoneBillDetail(id);
+            return View(details);
         }
     }
 }

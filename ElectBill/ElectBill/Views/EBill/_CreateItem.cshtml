@@ -16,5 +16,11 @@
         @Model.Quantity
         <input type="hidden" name="Items[@Model.Item_Index].Quantity" value="@Model.Quantity"/>
     </td>
-    <td><button type="button">Remove</button></td>
+    <td><button class="addbtn" type="button" onclick="RemoveItem(@Model.Item_Index)" >Remove</button></td>
 </tr>
+
+<script>
+    function RemoveItem(Id) {
+        $("#" + Id).remove(); 
+    }
+</script>

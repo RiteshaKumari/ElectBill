@@ -7,6 +7,8 @@ using ElectBill.Models;
 using System.Data;
 using System.Data.SqlClient;
 using System.Configuration;
+using System.Security.Cryptography.X509Certificates;
+using System.Web.UI.WebControls;
 
 
 namespace ElectBill.Repository
@@ -76,6 +78,79 @@ namespace ElectBill.Repository
             {
                 con.Close();
             }
+        }
+
+        public List<BillDetail> GetAllDetails()
+        {
+            List<BillDetail> list = new List<BillDetail>();
+            BillDetail Detail;
+            SqlConnection con = new SqlConnection(connectionString);
+            try
+            {
+                con.Open();
+                SqlCommand cmd = new SqlCommand("getAllEbillDetails", con);
+            
+                cmd.CommandType = CommandType.StoredProcedure;
+                SqlDataReader reader = cmd.ExecuteReader();
+                while(reader.Read())
+                {
+                    Detail = new BillDetail();
+                    Detail.Id = int.Parse(reader["BillDetail_Id"].ToString());
+                    Detail.Cust_Name = reader["Cust_Name"].ToString();
+                    Detail.Mobile = reader["Mobile"].ToString();
+                    Detail.Address = reader["Address"].ToString();
+                    Detail.Total_Amount = int.Parse(reader["Total_Amount"].ToString());
+                    list.Add(Detail);
+                }
+            }
+            catch(Exception)
+            {
+                throw;
+            }
+            finally { con.Close(); }
+            return list;
+        }
+
+        public BillDetail GetoneBillDetail(int id)
+        {
+            SqlConnection con = new SqlConnection(connectionString);
+            BillDetail detail = new BillDetail();
+           
+            try
+            {
+                con.Open();
+                SqlCommand cmd = new SqlCommand("getOneEbillDetails", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Id", id);  
+                SqlDataReader reader = cmd.ExecuteReader();
+                //if (reader.HasRows)
+                //{
+           
+                //}
+                while (reader.Read())
+                {
+                    detail.Id = int.Parse(reader["BillId"].ToString());
+                    detail.Cust_Name = reader["Cust_Name"].ToString();
+                    detail.Mobile = reader["Mobile"].ToString();
+                    detail.Address = reader["Address"].ToString();
+                    detail.Total_Amount = int.Parse(reader["Total_Amount"].ToString());
+                    Items item = new Items();
+                    item.Id = int.Parse(reader["ItemId"].ToString());
+                    item.Prod_Name = reader["Prod_Name"].ToString();
+                    item.Price = int.Parse(reader["Price"].ToString());
+                    item.Quantity = int.Parse(reader["Quality"].ToString());
+                    detail.Items.Add(item); 
+                }
+            }
+            catch(Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                con.Close();
+            }
+            return detail;
         }
     }
 }

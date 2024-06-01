@@ -1,0 +1,116 @@
+﻿
+@model ElectBill.Models.BillDetail
+
+<style>
+    .box {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        padding-top: 30px;
+    }
+
+    .cont {
+        padding: 20px;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+        width: 80%;
+        margin: 30px auto;
+        padding: 20px 50px;
+    }
+    .content-table {
+        border-collapse: collapse;
+        margin: 25px 0;
+        font-size: 0.9em;
+        min-width: 100%;
+        border-radius: 5px 5px 0 0;
+        overflow: hidden;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    }
+
+        .content-table thead tr {
+            background-color: #009879;
+            color: #ffffff;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        .content-table th,
+        .content-table td {
+            padding: 12px 15px;
+        }
+
+        .content-table tbody tr {
+            border-bottom: 1px solid #dddddd;
+        }
+
+            .content-table tbody tr:nth-of-type(even) {
+                background-color: #f3f3f3;
+            }
+
+            .content-table tbody tr:last-of-type {
+                border-bottom: 2px solid #009879;
+            }
+
+            .content-table tbody tr.active-row {
+                font-weight: bold;
+                color: #009879;
+            }
+    .totamt {
+        display: flex;
+        justify-content: flex-end;
+        padding-right: 40px;
+    }
+</style>
+
+<div class="cont">
+    <h1>Customer Bill</h1>
+    
+    <div class="box">
+        <div>
+
+
+            <h3>
+                Customer Detail
+            </h3><br />
+            <p>CustomerId : @Model.Id</p>
+            <p> Name : @Model.Cust_Name</p>
+            <p> Mobile : @Model.Mobile</p>
+            <p> Address : @Model.Address</p>
+
+        </div>
+        <div>
+            <h4>
+                About us:
+            </h4>
+
+            <pre style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">
+      GroseryShop , Patna, Bihar
+      Phone  :  1234567890
+      email   :  abc@gmail.com 
+    </pre>
+        </div>
+    </div>
+
+    <table class="content-table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Product Name</th>
+                <th>Price</th>
+                <th>Quantity</th>
+            </tr>
+        </thead>
+        <tbody>
+          @foreach (var item in Model.Items) {
+            <tr @*class="active-row"*@>
+                <td>@item.Id</td>
+                <td>@item.Prod_Name</td>
+                <td>@item.Price</td>
+                <td>@item.Quantity</td>
+            </tr>
+          }
+        </tbody>
+    </table>
+    <div class="totamt">
+        <p>Total Amount: @Model.Total_Amount</p>
+    </div>
+</div>

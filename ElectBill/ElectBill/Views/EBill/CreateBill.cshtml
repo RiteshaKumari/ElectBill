@@ -77,15 +77,15 @@
     }
 
 
-    table#alter tr:nth-child(even) {
+    table tr:nth-child(even) {
         background-color: #eee !important;
     }
 
-    table#alter tr:nth-child(odd) {
+    table tr:nth-child(odd) {
         background-color: #fff !important;
     }
 
-    table#alter th {
+    table th {
         color: white !important;
         background-color: gray !important;
     }
@@ -96,32 +96,6 @@
         margin-top: 34px;
     }
 
-    .addbtn {
-        display: inline-block;
-        outline: 0;
-        border: 0;
-        cursor: pointer;
-        will-change: box-shadow, transform;
-        background: radial-gradient(100% 100% at 100% 0%, #89E5FF 0%, #5468FF 100%);
-        box-shadow: 0px 2px 4px rgb(45 35 66 / 40%), 0px 7px 13px -3px rgb(45 35 66 / 30%), inset 0px -3px 0px rgb(58 65 111 / 50%);
-        padding: 10px 14px 5px 14px;
-        border-radius: 6px;
-        color: #fff;
-        height: 38px;
-        font-size: 16px;
-        text-shadow: 0 1px 0 rgb(0 0 0 / 40%);
-        transition: box-shadow 0.15s ease, transform 0.15s ease;
-    }
-
-        .addbtn:hover {
-            box-shadow: 0px 4px 8px rgb(45 35 66 / 40%), 0px 7px 13px -3px rgb(45 35 66 / 30%), inset 0px -3px 0px #3c4fe0;
-            transform: translateY(-2px);
-        }
-
-        .addbtn:active {
-            box-shadow: inset 0px 3px 7px #3c4fe0;
-            transform: translateY(2px);
-        }
 
 
     .popdesign {
@@ -149,7 +123,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background: rgba(20, 30, 90, .8);
+        background-color: rgba(0,0,0,0.5);
         transition: .6s;
         z-index: 2;
         cursor: pointer;
@@ -308,6 +282,8 @@
                 }
             })
         })
+
+
      
     });
 

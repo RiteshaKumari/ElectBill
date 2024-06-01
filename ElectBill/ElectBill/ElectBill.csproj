@@ -250,6 +250,7 @@
     <Content Include="Views\EBill\Index.cshtml" />
     <Content Include="Views\EBill\CreateBill.cshtml" />
     <Content Include="Views\EBill\_CreateItem.cshtml" />
+    <Content Include="Views\EBill\ViewBill.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
