@@ -89,7 +89,6 @@ namespace ElectBill.Repository
             {
                 con.Open();
                 SqlCommand cmd = new SqlCommand("getAllEbillDetails", con);
-            
                 cmd.CommandType = CommandType.StoredProcedure;
                 SqlDataReader reader = cmd.ExecuteReader();
                 while(reader.Read())

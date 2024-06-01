@@ -41,7 +41,7 @@ as
 begin
 select BillDetail.BillDetail_Id as 'BillId', BillDetail.Cust_Name,BillDetail.Mobile,BillDetail.Address,BillDetail.total_Amount, BillItems.BillItems_Id as 'ItemId',
 BillItems.Prod_Name,BillItems.Price,BillItems.Quality from
-BillDetail inner join BillItems on BillDetail_Id = BillItems_Id where BillDetail_Id = @Id;
+BillDetail inner join BillItems on BillDetail_Id = BillId where BillDetail_Id = @Id;
 
 end
 

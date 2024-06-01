@@ -12,7 +12,7 @@ namespace ElectBill.Controllers
     public class EBillController : Controller
     {
         // GET: EBill
-        public ActionResult Index()
+        public ActionResult Index() // view data per y dikta per usme view per click then per go to ViewBill
         {
             Data data = new Data();
             var list = data.GetAllDetails();
