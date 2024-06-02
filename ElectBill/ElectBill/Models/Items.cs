@@ -13,7 +13,7 @@ namespace ElectBill.Models
         public string Prod_Name { get; set; }
         public int Price { get; set; }
         public int Quantity { get; set; }
-        public int Item_Index { get; set; }
+        public int Item_Index { get; set; } //forein key of BillDetail.id
        
     }
 }

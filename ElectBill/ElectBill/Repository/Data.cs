@@ -48,7 +48,7 @@ namespace ElectBill.Repository
                 }
 
             }
-            catch(Exception) { 
+            catch(Exception) {
             throw;
             }
             finally
@@ -104,7 +104,8 @@ namespace ElectBill.Repository
             }
             catch(Exception)
             {
-                throw;
+                 throw;
+             
             }
             finally { con.Close(); }
             return list;
