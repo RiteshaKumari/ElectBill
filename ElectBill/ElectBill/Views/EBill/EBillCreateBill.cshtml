@@ -1,0 +1,204 @@
+﻿@*@model ElectBill.Models.custMaster*@
+@*@model ElectBill.Models.custMas_InvoDetail*@
+@model ElectBill.Models.custMaster
+@using System.Web.Mvc
+@using ElectBill.Models
+
+<link href="~/Content/Cust_css/createBill.css" rel="stylesheet" />
+
+<div class="CreateBcontainer">
+
+    <h1>Generate Bill</h1>
+    <h3 style="color:green;">@TempData["alertsuccess"]</h3>
+
+    <div class="fullpart">
+        <div class="billpart">
+
+            @using (Html.BeginForm("SaveCustDetail", "Home", FormMethod.Post))
+            {
+                <div class="itemhead">
+                    <h2>Customer Details</h2>
+                    <div>
+                        <button class="addbtn" type="submit">Save All Details</button>
+                    </div>
+
+                </div>
+                <div class="rows">
+                    <div class="row">
+
+                        @* @Html.HiddenFor(e => e.Id)*@
+                        <label >Customer Name</label>
+                        @Html.TextBoxFor(e => e.cust_Name, null, new { placeholder = "Customer Name", @class = "form-control" })
+                        @Html.ValidationMessageFor(e => e.cust_Name, null, new { @class = "text-danger " })
+                    </div>
+                    <div>
+
+                        <label for="lname">Mobile</label>
+                        @Html.TextBoxFor(e => e.cust_Mobile, null, new { placeholder = "Mobile", @class = "form-control" })
+                        @Html.ValidationMessageFor(e => e.cust_Mobile, null, new { @class = "text-danger " })
+                    </div>
+                </div>
+                <div class="row">
+                    <label for="lname">Address</label>
+                    @Html.TextBoxFor(e => e.cust_Address, null, new { placeholder = "Address", @class = "form-control" })
+                    @Html.ValidationMessageFor(e => e.cust_Address, null, new { @class = "text-danger " })
+                </div>
+
+                <div class="itemhead">
+                    <h2>Item List</h2>
+                    <div>
+
+                    </div>
+
+                </div>
+                <table id="items">
+                    <thead>
+                        <tr><th>Product Name</th><th>Price</th><th>Quantity</th><th></th></tr>
+
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+
+
+            }
+
+        </div>
+        <div class="popdesign">
+            <h2>Item Details</h2>
+            <div class="row">
+
+                <label for="productName">Product Name</label>
+                <input type="text" id="productName" placeholder="Product Name" required>
+
+                @*  @Html.DropDownListFor(model => model.ProdName, ViewBag.AllProduct as SelectList, "Select Products", new { @class = "form-control" })*@
+            </div>
+            <div class="row">
+                <label for="Price">Price</label>
+                <input type="text" id="Price" placeholder="Price" required>
+
+            </div>
+            <div class="row">
+
+                <label for="Quantity">Quantity</label>
+
+                <input type="text" id="Quantity" placeholder="Quantity" required>
+
+            </div>
+            <div class="row" style="margin-top:20px;">
+                <button class="addbtn" type="button" id="addbutton">Add</button>
+
+
+
+
+
+                @* <button class="addbtn" type="button" onclick="closepop()" style="background:red;box-shadow:none;">Close</button>*@
+            </div>
+        </div>
+    </div>
+
+    @*<div class="overlay" onclick="off()"></div>
+        <div class="popcontainer" onclick="off()"></div>*@
+
+</div>
+
+
+<script>
+
+
+
+    //  $(document).ready(setTimeout(popup, 5000));
+
+    document.getElementById('addbutton').addEventListener('click', function () {
+        var productName = document.getElementById('productName').value;
+        var price = document.getElementById('Price').value;
+        var quantity = document.getElementById('Quantity').value;
+
+        if (productName && price && quantity) {
+            var table = document.getElementById('items').getElementsByTagName('tbody')[0];
+            var newRow = table.insertRow();
+
+            var cell1 = newRow.insertCell(0);
+            var cell2 = newRow.insertCell(1);
+            var cell3 = newRow.insertCell(2);
+            var cell4 = newRow.insertCell(3);
+
+            cell1.textContent = productName;
+            cell2.textContent = price;
+            cell3.textContent = quantity;
+
+            // Optionally, clear the input fields after adding the item
+            document.getElementById('productName').value = '';
+            document.getElementById('Price').value = '';
+            document.getElementById('Quantity').value = '';
+        } else {
+            alert('Please fill in all fields');
+        }
+    });
+
+
+
+
+
+
+
+
+    // $(document).ready(function () {
+
+
+    //let quantity;
+    //let prod_name;
+    //let price;
+
+    //$('#addbutton').click(function () {
+    //    if ($('#productname').val() !== "") {
+    //        prod_name = $('#productname').val();
+    //        if ($('#price').val() !== "") {
+    //            price = $('#price').val();
+    //            if ($('#quantity').val() !== "") {
+    //                quantity = $('#quantity').val();
+
+    //                quantity = $('#quantity').val();
+
+    //                let item_index = $('#items tbody tr').length;
+
+    //                $.ajax({
+    //                    url: "/ebill/createitem",
+    //                    type: "post",
+    //                    data: { prod_name, price, quantity, item_index },
+    //                    success: function (resp) {
+    //                        $('#items tbody').append(resp);
+    //                        $('#productname').val("");
+    //                        $('#price').val("");
+    //                        $('#quantity').val("");
+    //                    },
+    //                    error: function (err) {
+    //                        //  alert(err)
+    //                    }
+    //                })
+    //            }
+    //            else {
+    //                swal.fire("quantity is required!");
+    //            }
+    //        }
+    //        else {
+    //            swal.fire("price is required!");
+    //        }
+    //    }
+    //    else {
+    //        swal.fire("productname is required!");
+    //    }
+
+
+
+
+
+    //})
+
+
+
+    // });
+
+
+
+</script>

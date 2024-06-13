@@ -1,0 +1,54 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>_Print</title>
+    <link rel="icon" type="image/x-icon" href="~/Content/Cust_img/fav_gif.gif">
+    @*   @Styles.Render("~/Content/css")*@
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .container {
+            width: 80%;
+            margin: 0px auto;
+        }
+
+        .addbtn {
+            display: inline-block;
+            outline: none;
+            cursor: pointer;
+            border-radius: 3px;
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 16px;
+            padding: 8px 9px;
+            height: 32px;
+            /*min-width: 60px;*/
+            min-height: 32px;
+            border: none;
+            color: #fff;
+            background-color: rgb(88, 101, 242);
+            transition: background-color .17s ease, color .17s ease;
+        }
+
+            .addbtn:hover {
+                background-color: rgb(71, 82, 196);
+            }
+    </style>
+</head>
+<body>
+  @RenderBody()
+</body>
+</html>

@@ -4,134 +4,207 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js" type="text/javascript"></script>
 
 <style>
+   
     .body {
-  font-family: "Helvetica Neue", Helvetica, Arial;
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: 400;
-  color: #3b3b3b;
-  -webkit-font-smoothing: antialiased;
-  font-smoothing: antialiased;
-  /*background: #2b2b2b;*/
-}
+        font-family: "Helvetica Neue", Helvetica, Arial;
+        font-size: 14px;
+        line-height: 20px;
+        font-weight: 400;
+        color: #3b3b3b;
+        -webkit-font-smoothing: antialiased;
+        font-smoothing: antialiased;
+    }
 
-.wrapper {
-  margin: 0 auto;
-  padding: 40px;
-  max-width: 1000px;
-}
+    .wrapper {
+        margin: 0 auto;
+        padding: 40px;
+        /*max-width: 1000px;*/
+    }
 
-.table {
-  margin: 0 0 40px 0;
-  width: 100%;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-  display: table;
-}
-@@media screen and (max-width: 580px) {
-  .table {
-    display: block;
-  }
-}
+    .table {
+        margin: 0 0 40px 0;
+        width: 100%;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        display: table;
+    }
 
-.row {
-  display: table-row;
-  background: #f6f6f6;
-}
-.row:nth-of-type(odd) {
-  background: #e9e9e9;
-}
-.row.header {
-  font-weight: 900;
-  color: #ffffff;
-  background: #ea6153;
-}
-.row.green {
-  background: #27ae60;
-}
-.row.blue {
-  background: #2980b9;
-}
-@@media screen and (max-width: 580px) {
-  .row {
-    padding: 8px 0;
-    display: block;
-  }
-}
+    @@media screen and (max-width: 580px) {
+        .table {
+            display: block;
+        }
+    }
 
-.cell {
-  padding: 6px 12px;
-  display: table-cell;
-}
-.btn{
-    text-decoration:none;
-}
-@@media screen and (max-width: 580px) {
-  .cell {
-    padding: 2px 12px;
-    display: block;
-  }
-}
+    .row {
+        display: table-row;
+        background: #f6f6f6;
+    }
+
+        .row:nth-of-type(odd) {
+            background: #e9e9e9;
+        }
+
+        .row.header {
+            font-weight: 900;
+            color: #ffffff;
+            background: #ea6153;
+        }
+
+        .row.green {
+            background: #27ae60;
+        }
+
+        .row.blue {
+            background: #2980b9;
+        }
+
+    .cell {
+        padding: 6px 12px;
+        display: table-cell;
+    }
+
+    .btn {
+        text-decoration: none;
+    }
+
+    @@media screen and (max-width: 580px) {
+        .row {
+            padding: 8px 0;
+            display: block;
+        }
+
+        .cell {
+            padding: 2px 12px;
+            display: block;
+        }
+    }
+    .green {
+        background-color: #309630;
+        display: inline-block;
+        outline: none;
+        cursor: pointer;
+        border-radius: 3px;
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 16px;
+        padding: 8px 9px;
+        height: 32px;
+        min-height: 32px;
+        border: none;
+        color: #fff;
+        transition: background-color .17s ease, color .17s ease;
+    }
 
 </style>
 
+
+
 <div class="body">
+    <pstyle="color:red;">@TempData["listalert"]</p>
+      
+    
+  
     <div class="wrapper">
-
-        
-
-        <div class="table">
-
-            <div class="row header blue">
-                <div class="cell">
-                    ID
-                </div>
-                <div class="cell">
-                    Customer Name
-                </div>
-                <div class="cell">
-                    Mobile
-                </div>
-                <div class="cell">
-                    Address
-                </div>
-                <div class="cell">
-                    Total_Amount
-                </div>
-                <div class="cell">
-                    
-                </div>
+        @using (Html.BeginForm("Index", "EBill", FormMethod.Post)) { 
+            <div style="display: flex; justify-content: flex-end; flex-wrap: wrap; padding-bottom: 16px;">
+                <p>Sort By:</p>
+          
+                @Html.DropDownList("ListId", ViewBag.SortTitle as SelectList, "Select")
+                <button type="submit">Sort</button>
             </div>
-
-            @foreach(var item in Model) {
-            <div class="row">
-                <div class="cell">
-                    @item.Id
-                </div>
-                <div class="cell">
-                    @item.Cust_Name
-                </div>
-                <div class="cell">
-                    @item.Mobile
-                </div>
-                <div class="cell">
-                    @item.Address
-                </div>
-                <div class="cell">
-                    @item.Total_Amount
-                </div>
-                <div class="cell">
-                    @Html.ActionLink("View", "ViewBill", "EBill", new {Id = @item.Id}, new {@class= "addbtn btn" })
-                </div>
-               
-            </div>
-            }
-            
-
+        }
+    <div class="table">
+        <div class="row header blue">
+            <div class="cell">ID</div>
+            <div class="cell">Customer Name</div>
+            <div class="cell">Mobile</div>
+            <div class="cell">Address</div>
+            <div class="cell">Total_Amount</div>
+            <div class="cell">dateTime</div>
+            <div class="cell">custpass</div>
+            <div class="cell"></div>
         </div>
 
+
+        @foreach (var item in Model)
+        {
+
+            <div class="row data-row" @*data-id="@item.Id"*@>
+                <div class="cell">@item.Id</div>
+                <div class="cell">@item.Cust_Name</div>
+                <div class="cell">@item.Mobile</div>
+                <div class="cell">@item.Address</div>
+                <div class="cell">@item.Total_Amount</div>
+                <div class="cell">@item.dateTime</div>
+                <div class="cell">@item.custpass</div>
+                <div class="cell">
+                    @Html.ActionLink("Edit", "Edit", "EBill", new { Id = @item.Id }, new { @class = " btn green" }) |
+                    @Html.ActionLink("View", "ViewBill", "EBill", new { Id = @item.Id }, new { @class = "addbtn btn" }) |
+                    @Html.ActionLink("Delete", "DeleteRow", "EBill", new { Id = @item.Id }, new { @class = "addbtn btn deletebtn", style = "background:red;" })
+                  @*  <a class="btn btn-danger addbtn deletebtn" href="/@item.Id">Delete</a>*@
+                </div>
+            </div>
+        }
+
     </div>
-    <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
-
-
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 </div>
+
+
+
+    <script>
+        //const element = document.getElementById('.deletebtn')
+        //element.onClick = function (e) {
+        //   // e.preventDefault()
+        //    Swal.fire({
+        //        title: "Are you sure?",
+        //        text: "You won't be able to revert this!",
+        //        icon: "warning",
+        //        showCancelButton: true,
+        //        confirmButtonColor: "#3085d6",
+        //        cancelButtonColor: "#d33",
+        //        confirmButtonText: "Yes, delete it!"
+        //    }).then((result) => {
+        //        if (result.isConfirmed) {
+        //            Swal.fire({
+        //                title: "Deleted!",
+        //                text: "Your file has been deleted.",
+        //                icon: "success"
+        //            });
+        //        }
+        //    });
+        //}
+
+       @*function confirmDelete(id) {
+            var hello = id;
+            if (confirm("Are you sure you want to delete this record?")) {
+               var url = '@Url.Action("DeleteCategory", "EBill")' + '?id=' + hello;
+               window.location.href = url;
+          }*@
+
+         
+
+
+
+
+    </script>
+    <script>
+
+       
+        //document.addEventListener("DOMContentLoaded", function () {
+        //    var table = document.querySelector(".table");
+        //    var rows = Array.from(table.querySelectorAll(".data-row"));
+
+
+        //    rows.sort(function (a, b) {
+        //        return parseInt(b.getAttribute("data-id")) - parseInt(a.getAttribute("data-id"));
+        //    });
+
+
+        //    rows.forEach(function (row) {
+        //        table.appendChild(row);
+        //    });
+        //});
+    </script>
+
 

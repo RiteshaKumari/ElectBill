@@ -1,0 +1,203 @@
+﻿@model ElectBill.Models.Customer
+@using System.Web.Mvc
+@using ElectBill.Models
+
+
+<link href="~/Content/Cust_css/createBill.css" rel="stylesheet" />
+
+<div class="CreateBcontainer">
+
+    <h1>Edit Bill</h1>
+    <h3 style="color:green;">@TempData["alertsuccess"]</h3>
+    <p style="color:red;">@TempData["message"]</p>
+    <div class="fullpart">
+        <div class="billpart">
+
+
+            <div class="itemhead">
+                <h2>Customer Details</h2>
+
+
+            </div>
+            @foreach (var item in ViewBag.editcustDetail)
+            {
+                <p>CustomerId : @item.BillId</p>
+                <p> Name : @item.cust_Name</p>
+                <p> Mobile : @item.cust_Mobile</p>
+                <p> Address : @item.cust_Address</p>
+
+            }
+            @{
+                int itemsr = 0;
+            }
+            @using (Html.BeginForm("EditBill", "Home", new { OID = @ViewBag.editcustDetail[0].OID, FormMethod.Post }))
+            {
+                <div class="itemhead">
+                    <h2>Item List</h2>
+                    <div>
+
+                        <button class="addbtn" type="submit">Update Details</button>
+
+                    </div>
+
+                </div>
+
+                <table id="items">
+                    <thead>
+                        <tr><th>Product Name</th><th>Price</th><th>Quantity</th><th></th></tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var item in ViewBag.ItemDetail)
+                        {
+
+
+                            <tr>
+                                @*  <td><input type="text" name="Item_Id" value="@item.Item_Id /></td>*@
+                                <td><input type="text" name="Items[@itemsr].Item_Name" value="@item.Item_Name" readonly required style="border:none;"></td>
+                                <td><input type="text" name="Items[@itemsr].Item_Price" value="@item.Item_Price" readonly required style="border:none;"></td>
+                                <td><input type="text" name="Items[@itemsr].Quantity" value="@item.Quantity" readonly required style="border:none;"></td>
+                                @* <td><button class="removebtn addbtn" type="button" id="delete">Remove</button></td>*@
+                                <td>@Html.ActionLink("Remove", "DeleteItem", "Home", new { Id = @item.Item_Id }, new { @class = "addbtn btn deletebtn", style = "background:#4752C4;text-decoration:none;", onclick = "return confirmRemove(this);" })</td>
+                            </tr>
+
+                            itemsr++;
+                        }
+                    </tbody>
+
+
+
+                    </table>
+            }
+        </div>
+
+        <div class="popdesign">
+            <h2>Item Details</h2>
+            <div class="row">
+
+                <label for="productName">Product Name</label>
+
+
+
+                <input type="text" id="productName" placeholder="Product Name" required>
+                @*  @Html.DropDownListFor(model => model.ProdName, ViewBag.AllProduct as SelectList, "Select Products", new { @class = "form-control" })*@
+            </div>
+            <div class="row">
+
+                <label for="Price">Price</label>
+
+
+
+                <input type="text" id="Price" placeholder="Price" required>
+
+            </div>
+            <div class="row">
+
+                <label for="Quantity">Quantity</label>
+
+
+
+                <input type="text" id="Quantity" placeholder="Quantity" required>
+
+            </div>
+            <div class="row" style="margin-top:20px;">
+                <button class="addbtn" type="button" id="addbutton">Add</button>
+
+
+
+
+
+                @* <button class="addbtn" type="button" onclick="closepop()" style="background:red;box-shadow:none;">Close</button>*@
+            </div>
+        </div>
+    </div>
+
+    @*<div class="overlay" onclick="off()"></div>
+        <div class="popcontainer" onclick="off()"></div>*@
+
+</div>
+
+
+<script>
+
+
+    //  $(document).ready(setTimeout(popup, 5000));
+
+    document.getElementById('addbutton').addEventListener('click', function () {
+        const productName = document.getElementById('productName').value;
+        const price = document.getElementById('Price').value;
+        const quantity = document.getElementById('Quantity').value;
+        var itemsr=@itemsr;
+        if (productName && price && quantity) {
+            const tbody = document.querySelector('#items tbody');
+            const index = itemsr;
+            const tr = document.createElement('tr');
+            tr.classList.add('dynamic-row');
+            // element.setAttribute("id", "my-id");
+            tr.innerHTML = `
+            <td><input type="text" name="Items[${index}].Item_Name" value="${productName}" readonly required style="border:none;"></td>
+            <td><input type="number" name="Items[${index}].Item_Price" value="${price}" readonly required style="border:none;"></td>
+            <td><input type="number" name="Items[${index}].Quantity" value="${quantity}" readonly required style="border:none;"></td>
+            <td><button class="removebtn addbtn" type="button">Remove</button></td>`;
+
+            tr.querySelector('.removebtn').addEventListener('click', function () {
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You won't be able to revert this!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes, delete it!"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        tr.remove();
+                        Swal.fire({
+                            title: "Deleted!",
+                            text: "Your file has been deleted.",
+                            icon: "success"
+                        });
+                    }
+                });
+
+            });
+
+            tbody.appendChild(tr);
+
+            document.getElementById('productName').value = '';
+            document.getElementById('Price').value = '';
+            document.getElementById('Quantity').value = '';
+        } else {
+            alert('Please fill out all fields.');
+        }
+    });
+
+
+
+    function confirmRemove(link) {
+        event.preventDefault(); // Prevent the default action
+        const url = link.href;
+
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, Remove it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = url + "&confirm=true";
+            }
+        });
+
+        return false; // Prevent the default action
+    }
+
+
+
+
+
+
+</script>

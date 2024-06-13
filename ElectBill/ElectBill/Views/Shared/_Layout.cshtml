@@ -5,10 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - My ASP.NET Application</title>
     <link rel="icon" type="image/x-icon" href="~/Content/Cust_img/fav_gif.gif">
-
+    @*   @Styles.Render("~/Content/css")*@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-
-
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  
+    @* <link href="~/Content/Cust_css/Bootstrap.min.css" rel="stylesheet" />*@
 
 
     <style>
@@ -25,49 +28,72 @@
 
         .addbtn {
             display: inline-block;
-            outline: 0;
-            border: 0;
+            outline: none;
             cursor: pointer;
-            will-change: box-shadow, transform;
-            background: radial-gradient(100% 100% at 100% 0%, #89E5FF 0%, #5468FF 100%);
-            box-shadow: 0px 2px 4px rgb(45 35 66 / 40%), 0px 7px 13px -3px rgb(45 35 66 / 30%), inset 0px -3px 0px rgb(58 65 111 / 50%);
-            padding: 10px 14px 5px 14px;
-            border-radius: 6px;
+            border-radius: 3px;
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 16px;
+            padding: 8px 9px;
+            height: 32px;
+            min-height: 32px;
+            border: none;
             color: #fff;
-            height: 38px;
-            font-size: 16px;
-            text-shadow: 0 1px 0 rgb(0 0 0 / 40%);
-            transition: box-shadow 0.15s ease, transform 0.15s ease;
+            background-color: rgb(88, 101, 242);
+            transition: background-color .17s ease, color .17s ease;
+            width: fit-content !important;
         }
 
-            .addbtn:hover {
-                box-shadow: 0px 4px 8px rgb(45 35 66 / 40%), 0px 7px 13px -3px rgb(45 35 66 / 30%), inset 0px -3px 0px #3c4fe0;
-                transform: translateY(-2px);
-            }
 
-            .addbtn:active {
-                box-shadow: inset 0px 3px 7px #3c4fe0;
-                transform: translateY(2px);
+
+
+
+
+            .addbtn:hover {
+                background-color: rgb(71, 82, 196);
             }
     </style>
     <link href="~/Content/Cust_css/navbar.css" rel="stylesheet" />
 </head>
 <body>
     <header>
+        @{
+            var isCreateBillView = ViewContext.RouteData.Values["controller"].ToString().Equals("EBill") &&
+                                    ViewContext.RouteData.Values["action"].ToString().Equals("CreateBill");
+        }
+        @{
+            var isViewBillView = ViewContext.RouteData.Values["controller"].ToString().Equals("EBill") &&
+                                    ViewContext.RouteData.Values["action"].ToString().Equals("Index");
+        }
         <nav class="nav">
             <ul class="menu">
-                <li class="logo"><a href="#">myLibrary</a></li>
-                @*<li class="item">
-                    @Html.ActionLink("loginSignup", "loginSignup", "Home")
-                </li>*@
-                @*  <li class="item"><a href="/loginSignup.cshtml">loginSignup</a></li>*@
-                <li class="item">
-                    @Html.ActionLink("View Bill", "Index", "EBill")
-                </li>
-                <li class="item"> @Html.ActionLink("Create Bill", "CreateBill", "EBill")</li>
 
+                <li class="logo"><a href="/">myBill</a></li>
+                @if (Request.Cookies["Email"] != null && TempData["logindata"] != null && Request.Cookies["Email"].Value == TempData["logindata"].ToString())
+                {
+                  //  if (!isViewBillView) { 
+                    <li class="item">
+                        @Html.ActionLink("ViewAllCustmer", "DetailInRow", "Home")
+                    </li>
+                   // }
+                   //  if (!isCreateBillView)
+                   // {
+                        <li class="item">
+                            @Html.ActionLink("Create Bill", "CreateBill", "Home")
+                        </li>
+                   // }
+                    <li class="item">
+                        @Html.ActionLink("Logout", "Logout", "Home")
+                    </li>
+                }
+                else
+                {
+                    <li class="item">
+                        @Html.ActionLink("Login", "Login", "Home")
+                   </li>
+                }
 
-               @* <li class="item button"><a href="#">Log In</a></li>*@
+                @* <li class="item button"><a href="#">Log In</a></li>*@
                 @*<li class="item button secondary"><a href="#">Sign Up</a></li>*@
                 <li class="toggle"><span class="bars"></span></li>
             </ul>

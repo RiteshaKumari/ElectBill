@@ -46,6 +46,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Rotativa, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rotativa.1.7.4-rc\lib\net45\Rotativa.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.SqlClient, Version=4.6.1.6, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -128,13 +131,20 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\BillDetail.cs" />
-    <Compile Include="Models\Items.cs" />
+    <Compile Include="Models\custMaster.cs" />
+    <Compile Include="Models\custMas_InvoDetail.cs" />
+    <Compile Include="Models\Customer.cs" />
+    <Compile Include="Models\editBill.cs" />
+    <Compile Include="Models\editmodal.cs" />
+    <Compile Include="Models\Invoice_Detail.cs" />
+    <Compile Include="Models\Invoice_Master.cs" />
+    <Compile Include="Models\ItemDetail.cs" />
+    <Compile Include="Models\Login.cs" />
+    <Compile Include="Models\Payment_Detail.cs" />
     <Compile Include="Models\Utility.cs" />
     <Compile Include="obj\Debug\.NETFramework,Version=v4.7.2.AssemblyAttributes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\Data.cs" />
-    <Compile Include="Repository\InterfData.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="bin\Antlr3.Runtime.dll" />
@@ -200,6 +210,7 @@
     <Content Include="bin\System.Web.WebPages.Razor.xml" />
     <Content Include="bin\System.Web.WebPages.xml" />
     <Content Include="bin\WebGrease.dll" />
+    <Content Include="Content\Cust_css\createBill.css" />
     <Content Include="Content\Cust_css\Index.css" />
     <Content Include="Content\Cust_css\navbar.css" />
     <Content Include="Content\Cust_img\fav_gif.gif" />
@@ -208,6 +219,10 @@
     <Content Include="obj\Debug\ElectBill.csproj.FileListAbsolute.txt" />
     <Content Include="obj\Debug\ElectBill.dll" />
     <Content Include="obj\Debug\ElectBill.pdb" />
+    <Content Include="Rotativa\help-wkhtmltoimage.txt" />
+    <Content Include="Rotativa\help-wkhtmltopdf.txt" />
+    <Content Include="Rotativa\wkhtmltoimage.exe" />
+    <Content Include="Rotativa\wkhtmltopdf.exe" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -219,7 +234,7 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\Welcome.cshtml" />
+    <Content Include="Views\Home\CreateBill.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -245,12 +260,21 @@
     <Content Include="obj\Debug\ElectBill.csproj.AssemblyReference.cache" />
     <Content Include="obj\Debug\ElectBill.csproj.CoreCompileInputs.cache" />
     <Content Include="obj\Debug\ElectBill.csproj.Up2Date" />
+    <Content Include="App_Browsers\qt.browser" />
     <None Include="packages.config" />
-    <Content Include="Views\Home\loginSignup.cshtml" />
+    <Content Include="Views\Home\login.cshtml" />
     <Content Include="Views\EBill\Index.cshtml" />
-    <Content Include="Views\EBill\CreateBill.cshtml" />
+    <Content Include="Views\EBill\EBillCreateBill.cshtml" />
     <Content Include="Views\EBill\_CreateItem.cshtml" />
     <Content Include="Views\EBill\ViewBill.cshtml" />
+    <Content Include="Views\EBill\DeleteCategory.cshtml" />
+    <Content Include="Views\Shared\_Print.cshtml" />
+    <Content Include="Views\EBill\Edit.cshtml" />
+    <Content Include="Views\EBill\editRow.cshtml" />
+    <Content Include="Views\Home\DetailInRow.cshtml" />
+    <Content Include="Views\Home\Invoice.cshtml" />
+    <Content Include="Views\Home\EditBill.cshtml" />
+    <Content Include="Views\Home\InvoiceDownload.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

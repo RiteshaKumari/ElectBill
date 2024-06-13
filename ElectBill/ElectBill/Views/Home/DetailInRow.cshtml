@@ -1,0 +1,525 @@
+﻿
+<style>
+
+    .body {
+        font-family: "Helvetica Neue", Helvetica, Arial;
+        font-size: 14px;
+        line-height: 20px;
+        font-weight: 400;
+        color: #3b3b3b;
+        -webkit-font-smoothing: antialiased;
+        font-smoothing: antialiased;
+    }
+
+    .wrapper {
+        margin: 0 auto;
+        padding: 40px;
+        /*max-width: 1000px;*/
+    }
+
+    .table {
+        margin: 0 0 40px 0;
+        width: 100%;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        display: table;
+    }
+
+    @@media screen and (max-width: 580px) {
+        .table {
+            display: block;
+        }
+    }
+
+    .row {
+        display: table-row;
+        background: #f6f6f6;
+    }
+
+        .row:nth-of-type(odd) {
+            background: #e9e9e9;
+        }
+
+        .row.header {
+            font-weight: 900;
+            color: #ffffff;
+            background: #ea6153;
+        }
+
+        .row.green {
+            background: #27ae60;
+        }
+
+        .row.blue {
+            background: #2980b9;
+        }
+
+    .cell {
+        padding: 6px 12px;
+        display: table-cell;
+    }
+
+    .btn {
+        text-decoration: none;
+    }
+
+    @@media screen and (max-width: 580px) {
+        .row {
+            padding: 8px 0;
+            display: block;
+        }
+
+        .cell {
+            padding: 2px 12px;
+            display: block;
+        }
+    }
+
+    .green {
+        width:fit-content;
+        background-color: #309630;
+        display: inline-block;
+        outline: none;
+        cursor: pointer;
+        border-radius: 3px;
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 16px;
+        padding: 8px 9px;
+        height: 32px;
+        min-height: 32px;
+        border: none;
+        color: #fff;
+        transition: background-color .17s ease, color .17s ease;
+    }
+
+    .status-cell {
+        color: green;
+    }
+
+        .status-cell.Deactive {
+            color: red;
+        }
+
+    .input-group {
+        width: 30%;
+        height: 100%;
+        background-color: #95c1de;
+        padding: 9px .8rem;
+        border-radius: 2rem;
+        display: flex;
+        justify-content: center;
+        transition: .2s;
+        margin-bottom: 10px;
+        align-items: center;
+    }
+
+        .input-group:hover {
+            width: 35%;
+            background-color: #fff8;
+            box-shadow: 0 .1rem .4rem #0002;
+        }
+
+        .input-group i {
+            width: 1.2rem;
+            height: 1.2rem;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 0 .5rem 0 .3rem;
+            background-color: transparent;
+            border: none;
+            outline: none;
+        }
+
+    .data-row.hide {
+        display: none;
+    }
+
+    .data-row:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    span.icon-arrow {
+        display: inline-block;
+        width: 1.3rem;
+        height: 1.3rem;
+        border-radius: 50%;
+        border: 1.4px solid transparent;
+        text-align: center;
+        font-size: 1rem;
+        margin-left: .5rem;
+        transition: .2s ease-in-out;
+    }
+
+    .header:hover span.icon-arrow {
+        border: 1.4px solid #6c00bd;
+    }
+
+    .header:hover {
+        color: #6c00bd;
+    }
+
+    .header.active span.icon-arrow {
+        background-color: #6c00bd;
+        color: #fff;
+    }
+
+    .header.asc span.icon-arrow {
+        transform: rotate(180deg);
+    }
+    .table {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .header, .data-row {
+        display: flex;
+        width: 100%;
+    }
+
+    .cell {
+        flex:2;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: flex;
+        padding: 10px;
+        box-sizing: border-box;
+        border-bottom: 1px solid #ccc;
+        flex-direction: column;
+    }
+
+    /* Make header cells fixed width */
+    .header .cell {
+        flex: 1;
+        cursor: pointer;
+        text-align: left;
+        background: #007bff; /* Example background color for header */
+        color: white;
+        font-weight: bold;
+    }
+
+    .cell span.icon-arrow {
+        margin-left: 10px; /* Add space between text and arrow */
+        cursor: pointer; /* Change cursor to pointer for arrows */
+    }
+
+    /* Add custom class to cells when active */
+    .cell.active {
+        background: #f1f1f1; /* Example background color for active cell */
+    }
+    .editbtnshow{
+        display:block;
+    }
+    .editbtnhide, .deletebtnhide {
+        display: none !important;
+    }
+    .deactivated {
+        background-color: red !important;
+        color: white !important;
+    }
+</style>
+
+
+
+<div class="body">
+    <p style="color:red;">
+        @TempData["listalert"]
+    </p>
+
+
+
+    <div class="wrapper">
+        @*@using (Html.BeginForm("Index", "EBill", FormMethod.Post))
+            {
+                <div style="display: flex; justify-content: flex-end; flex-wrap: wrap; padding-bottom: 16px;">
+                    <p>Sort By:</p>
+
+
+                    <button type="submit">Sort</button>
+                </div>
+            }*@
+<main class="table" id="customers_table">
+    <section class="table__header">
+        <div class="input-group">
+            <input type="search" placeholder="Search Data..." id="search-input">
+            <i class="fa-solid fa-magnifying-glass"></i>
+        </div>
+    </section>
+    <section class="table__body">
+        <div class="table">
+            <div class="row header blue">
+                <div class="cell">CustomerID<span class="icon-arrow" data-column="0">&UpArrow;</span></div>
+                <div class="cell">CustName<span class="icon-arrow" data-column="1">&UpArrow;</span></div>
+                <div class="cell">Custpass<span class="icon-arrow" data-column="2">&UpArrow;</span></div>
+                <div class="cell">cust_Mobile<span class="icon-arrow" data-column="3">&UpArrow;</span></div>
+                <div class="cell">totalPrice<span class="icon-arrow" data-column="4">&UpArrow;</span></div>
+                <div class="cell">OID<span class="icon-arrow" data-column="5">&UpArrow;</span></div>
+                <div class="cell">status<span class="icon-arrow" data-column="6">&UpArrow;</span></div>
+                <div class="cell">DateTime<span class="icon-arrow" data-column="7">&UpArrow;</span></div>
+                <div class="cell"></div>
+                @*<div class="cell"></div>*@
+                <div class="cell"></div>
+                <div class="cell"></div>
+                <div class="cell"></div>
+            </div>
+
+            @foreach (var item in ViewBag.AllBooking)
+            {
+                <div class="row data-row">
+                    <div class="cell ">@item.cust_Id</div>
+                    <div class="cell">@item.cust_Name</div>
+                    <div class="cell">@item.password</div>
+                    <div class="cell">@item.cust_Mobile</div>
+                    <div class="cell">@item.totalPrice</div>
+                    <div class="cell">@item.OID</div>
+                    <div class="cell status-cell" style="color:@(item.status == "Deactive" ? "red" : "green")">@item.status</div>
+                    <div class="cell">@item.DateTime</div>
+                    @*<div class="cell">
+                        @Html.ActionLink("Edit", "EditBill", "Home", new { OID = @item.OID }, new { @class = "btn green editbtn" })
+                    </div>*@
+                    <div class="cell">
+                        @Html.ActionLink("View", "Invoice", "Home", new { Id = @item.cust_Id }, new { @class = "addbtn btn" })
+                    </div>
+                    <div class="cell">
+                        <form action="@Url.Action("Cancel", "Home")" method="post" data-confirm-cancel="true">
+                            <input type="hidden" name="Id" value="@item.cust_Id" />
+                            <input type="hidden" name="confirm" value="true" />
+                            <button type="submit" class="addbtn btn deletebtn" style="background:red;">Cancel</button>
+                        </form>
+                    </div>
+                    <div class="cell">
+                        @Html.ActionLink("Delete", "DeleteRow", "Home", new { Id = @item.cust_Id }, new { @class = "addbtn btn deletebtn", style = "background:red;", onclick = "return confirmDelete(this);" })
+                    </div>
+                    <div class="cell">
+                        @Html.ActionLink("Download", "ConvertToPDF", "Home", new { Id = @item.cust_Id }, new { @class = "addbtn btn" })
+                    </div>
+                </div>
+            }
+        </div>
+    </section>
+</main>
+
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+</div>
+
+<script>
+    function confirmDelete(link) {
+        event.preventDefault(); // Prevent the default action
+        const url = link.href;
+
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = url + "&confirm=true";
+            }
+        });
+
+        return false; // Prevent the default action
+    }
+
+
+    
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var forms = document.querySelectorAll('form[data-confirm-cancel]');
+        forms.forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                confirmCancel(event, form);
+            });
+        });
+
+        // Check localStorage and apply changes if needed
+        applyStoredChanges();
+    });
+
+    function confirmCancel(event, form) {
+        // Prevent the default action
+        event.preventDefault();
+
+        // Display SweetAlert2 confirmation dialog
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You really want to cancel!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, cancel it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                console.log("Cancellation confirmed");
+
+                // Hide the Edit button within the same row as the form
+                var row = form.closest('.row');
+                var editButton = row.querySelector(".editbtn");
+                var cancelButton = form.querySelector(".deletebtn");
+                var statusCell = row.querySelector(".status-cell");
+
+                if (editButton) {
+                    editButton.classList.add('editbtnhide');
+                    // Save the state to localStorage
+                    localStorage.setItem('editbtn_' + form.querySelector('input[name="Id"]').value, 'hidden');
+                } else {
+                    console.log("Edit button not found in the current row");
+                }
+
+                if (cancelButton) {
+                    cancelButton.classList.add('deletebtnhide');
+                    // Save the state to localStorage
+                    localStorage.setItem('cancelbtn_' + form.querySelector('input[name="Id"]').value, 'hidden');
+                } else {
+                    console.log("Cancel button not found in the current row");
+                }
+
+                if (statusCell) {
+                    statusCell.textContent = "Deactive";
+                    statusCell.style.color = "red";
+                    // Save the status change to localStorage
+                    localStorage.setItem('status_' + form.querySelector('input[name="Id"]').value, 'deactivated');
+                }
+
+                // Submit the form asynchronously after confirmation
+                fetch(form.action, {
+                    method: form.method,
+                    body: new FormData(form)
+                }).then(response => {
+                    if (response.ok) {
+                        console.log("Form submitted successfully.");
+                        // Optionally, you can handle the response here if needed
+                    } else {
+                        console.error("Form submission failed.");
+                    }
+                }).catch(error => {
+                    console.error("An error occurred during form submission:", error);
+                });
+            }
+        });
+
+        return false; // Prevent the default action
+    }
+
+    function applyStoredChanges() {
+        var forms = document.querySelectorAll('form[data-confirm-cancel]');
+        forms.forEach(function (form) {
+            var id = form.querySelector('input[name="Id"]').value;
+            var row = form.closest('.row');
+
+            if (localStorage.getItem('editbtn_' + id) === 'hidden') {
+                var editButton = row.querySelector(".editbtn");
+                if (editButton) {
+                    editButton.classList.add('editbtnhide');
+                }
+            }
+
+            if (localStorage.getItem('cancelbtn_' + id) === 'hidden') {
+                var cancelButton = form.querySelector(".deletebtn");
+                if (cancelButton) {
+                    cancelButton.classList.add('deletebtnhide');
+                }
+            }
+
+            if (localStorage.getItem('status_' + id) === 'deactivated') {
+                var statusCell = row.querySelector(".status-cell");
+                if (statusCell) {
+                    statusCell.textContent = "Deactive";
+                    statusCell.style.color = "red";
+                }
+            }
+        });
+    }
+
+    //----------------------------searching--------------------------------
+    document.addEventListener("DOMContentLoaded", function () {
+        const search = document.querySelector('.input-group input');
+        const table_rows = document.querySelectorAll('.data-row');
+
+        search.addEventListener('input', searchTable);
+
+        function searchTable() {
+            const search_data = search.value.toLowerCase();
+
+            table_rows.forEach((row, i) => {
+                const table_data = row.textContent.toLowerCase();
+                const row_match = table_data.indexOf(search_data) >= 0;
+
+                row.classList.toggle('hide', !row_match);
+                row.style.setProperty('--delay', i / 25 + 's');
+            });
+
+            document.querySelectorAll('.data-row:not(.hide)').forEach((visible_row, i) => {
+                visible_row.style.backgroundColor = (i % 2 == 0) ? 'transparent' : '#0000000b';
+            });
+        }
+    });
+
+    //--------------------sorting---------------------------------
+    document.addEventListener("DOMContentLoaded", function () {
+        const search = document.querySelector('#search-input');
+        const tableRows = document.querySelectorAll('.data-row');
+        const headers = document.querySelectorAll('.icon-arrow');
+
+        search.addEventListener('input', searchTable);
+
+        headers.forEach((header, index) => {
+            let sortAsc = true;
+            header.addEventListener('click', () => {
+                sortTable(index, sortAsc);
+                sortAsc = !sortAsc;
+                headers.forEach(h => h.innerHTML = "&UpArrow;"); // Reset all arrows
+                header.innerHTML = sortAsc ? "&DownArrow;" : "&UpArrow;"; // Set current arrow
+            });
+        });
+
+        function searchTable() {
+            const searchData = search.value.toLowerCase();
+
+            tableRows.forEach((row, i) => {
+                const rowData = row.textContent.toLowerCase();
+                const rowMatch = rowData.indexOf(searchData) >= 0;
+
+                row.classList.toggle('hide', !rowMatch);
+                row.style.setProperty('--delay', i / 25 + 's');
+            });
+
+            document.querySelectorAll('.data-row:not(.hide)').forEach((visibleRow, i) => {
+                visibleRow.style.backgroundColor = (i % 2 === 0) ? 'transparent' : '#0000000b';
+            });
+        }
+
+        function sortTable(column, asc) {
+            const sortedRows = Array.from(tableRows).sort((a, b) => {
+                const aCells = a.querySelectorAll('.cell');
+                const bCells = b.querySelectorAll('.cell');
+
+                if (!aCells[column] || !bCells[column]) {
+                    return 0; // Skip sorting if the column doesn't exist
+                }
+
+                const aText = aCells[column].textContent.toLowerCase();
+                const bText = bCells[column].textContent.toLowerCase();
+
+                if (aText === bText) {
+                    return 0;
+                }
+
+                return asc ? (aText > bText ? 1 : -1) : (aText > bText ? -1 : 1);
+            });
+
+            const tableBody = document.querySelector('.table');
+            sortedRows.forEach(row => tableBody.appendChild(row));
+        }
+    });
+
+
+</script>

@@ -1,0 +1,96 @@
+﻿<link href="~/Content/Cust_css/createBill.css" rel="stylesheet" />
+
+@model ElectBill.Models.editRow
+
+<div class="CreateBcontainer">
+
+    <h1>Generate Bill</h1>
+    <h3 style="color:green;">@TempData["alertsuccess"]</h3>
+    <div class="fullpart">
+        <div class="billpart">
+
+            <h3>
+                Customer Detail
+            </h3><br />
+            @foreach (var item in ViewBag.editrow)
+            {
+                <p>CustomerId : @Model.Id</p>
+                <p> Name : @Model.Cust_Name</p>
+                <p> Mobile : @Model.Mobile</p>
+                <p> Address : @Model.Address</p>
+
+            }
+                <div class="itemhead">
+                    <h2>Item List</h2>
+                    <div>
+
+                    </div>
+
+                </div>
+                <table id="items">
+                    <thead>
+                        <tr><th>Product Name</th><th>Price</th><th>Quantity</th><th></th></tr>
+
+                    </thead>
+                    @*<tbody>
+                    @foreach (var item in ViewBag.editrow)
+                    {
+
+
+
+                    }
+                </tbody>*@
+                </table>
+
+
+
+            </div>
+
+        @using (Html.BeginForm("editRow", "Home", FormMethod.Post))
+        {
+            <div class="popdesign">
+                <h2>Item Details</h2>
+                <div class="row">
+                <label for="productName">Product Name</label>
+                    @Html.TextBoxFor(e => e.ProdName, null, new { placeholder = "Customer Name", @class = "form-control" })
+                    @Html.ValidationMessageFor(e => e.ProdName, null, new { @class = "text-danger " })
+                   @* <input type="text" id="productName" placeholder="Product Name" required>*@
+
+                    @*@Html.DropDownListFor(model => model.ProdName, ViewBag.AllProduct as SelectList, "Select Products", new { @class = "form-control" })*@
+                </div>
+                <div class="row">
+                    <label for="Price">Price</label>
+                    @Html.TextBoxFor(e => e.Price, null, new { placeholder = "Customer Name", @class = "form-control" })
+                    @Html.ValidationMessageFor(e => e.Price, null, new { @class = "text-danger " })
+                    @*  <input type="text" id="Price" placeholder="Price" required>*@
+
+                </div>
+                <div class="row">
+                 <label for="Quantity">Quantity</label>
+                    @Html.TextBoxFor(e => e.Quantity, null, new { placeholder = "Customer Name", @class = "form-control" })
+                    @Html.ValidationMessageFor(e => e.Quantity, null, new { @class = "text-danger " })
+                    @*<input type="text" id="Quantity" placeholder="Quantity" required>*@
+                </div>
+                <div class="row" style="margin-top:20px;">
+                    <button class="addbtn" type="submit" id="addbutton">Add</button>
+               @* <button class="addbtn" type="button" onclick="closepop()" style="background:red;box-shadow:none;">Close</button>*@
+                </div>
+            </div>
+        }
+        </div>
+        
+    @*<div class="overlay" onclick="off()"></div>
+        <div class="popcontainer" onclick="off()"></div>*@
+
+</div>
+
+<script>
+   $(document).ready(function() {
+    Swal.fire({
+        title: "Good job!",
+        text: '@TempData["showEdit"]',
+        icon: "success"
+    });
+});
+</script>
+

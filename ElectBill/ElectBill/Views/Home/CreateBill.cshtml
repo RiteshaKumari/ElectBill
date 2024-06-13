@@ -1,0 +1,172 @@
+﻿@*@model ElectBill.Models.BillDetail*@
+@model ElectBill.Models.Customer
+@using System.Web.Mvc
+@using ElectBill.Models
+
+<link href="~/Content/Cust_css/createBill.css" rel="stylesheet" />
+
+<div class="CreateBcontainer">
+
+    <h1>Generate Bill</h1>
+    <h3 style="color:green;">@TempData["alertsuccess"]</h3>
+    <p style="color:red;">@TempData["message"]</p>
+    <div class="fullpart">
+        <div class="billpart">
+
+            @using (Html.BeginForm("CreateBill", "Home", FormMethod.Post))
+            {
+                <div class="itemhead">
+                    <h2>Customer Details</h2>
+                    <div>
+                        <button class="addbtn" type="submit">Save All Details</button>
+                    </div>
+
+                </div>
+                <div class="rows">
+                    <div class="row">
+
+                        @* @Html.HiddenFor(e => e.Id)*@
+                        <label >Customer Name</label>
+                        @Html.TextBoxFor(e => e.cust_Name, null, new { placeholder = "Customer Name", @class = "form-control" })
+                        @Html.ValidationMessageFor(e => e.cust_Name, null, new { @class = "text-danger " })
+                    </div>
+                    <div class="row">
+
+                        <label >Mobile</label>
+                        @Html.TextBoxFor(e => e.cust_Mobile, null, new { placeholder = "Mobile", @class = "form-control" })
+                        @Html.ValidationMessageFor(e => e.cust_Mobile, null, new { @class = "text-danger " })
+                    </div>
+                </div>
+                <div class="row">
+                    <label >Address</label>
+                    @Html.TextBoxFor(e => e.cust_Address, null, new { placeholder = "Address", @class = "form-control" })
+                    @Html.ValidationMessageFor(e => e.cust_Address, null, new { @class = "text-danger " })
+                </div>
+
+                <div class="itemhead">
+                    <h2>Item List</h2>
+                    <div>
+
+                    </div>
+
+                </div>
+                <table id="items">
+                    <thead>
+                        <tr><th>Product Name</th><th>Price</th><th>Quantity</th><th></th></tr>
+                    </thead>
+                    <tbody>
+                     
+                    </tbody>
+                </table>
+            }
+
+        </div>
+        <div class="popdesign">
+            <h2>Item Details</h2>
+            <div class="row">
+
+                <label for="productName">Product Name</label>
+
+
+
+                <input type="text" id="productName" placeholder="Product Name" required>
+                @*  @Html.DropDownListFor(model => model.ProdName, ViewBag.AllProduct as SelectList, "Select Products", new { @class = "form-control" })*@
+            </div>
+            <div class="row">
+
+                <label for="Price">Price</label>
+
+
+
+                <input type="text" id="Price" placeholder="Price" required>
+
+            </div>
+            <div class="row">
+
+                <label for="Quantity">Quantity</label>
+
+
+
+                <input type="text" id="Quantity" placeholder="Quantity" required>
+
+            </div>
+            <div class="row" style="margin-top:20px;">
+                <button class="addbtn" type="button" id="addbutton">Add</button>
+
+
+
+
+
+                @* <button class="addbtn" type="button" onclick="closepop()" style="background:red;box-shadow:none;">Close</button>*@
+            </div>
+        </div>
+    </div>
+
+    @*<div class="overlay" onclick="off()"></div>
+        <div class="popcontainer" onclick="off()"></div>*@
+
+</div>
+
+
+<script>
+
+
+
+    //  $(document).ready(setTimeout(popup, 5000));
+
+    document.getElementById('addbutton').addEventListener('click', function () {
+        const productName = document.getElementById('productName').value;
+        const price = document.getElementById('Price').value;
+        const quantity = document.getElementById('Quantity').value;
+
+        if (productName && price && quantity) {
+            const tbody = document.querySelector('#items tbody');
+            const index = tbody.children.length;
+            const tr = document.createElement('tr');
+           // element.setAttribute("id", "my-id");
+            tr.innerHTML = `
+            <td><input type="text" name="Items[${index}].Item_Name" value="${productName}" readonly required style="border:none;"></td>
+            <td><input type="number" name="Items[${index}].Item_Price" value="${price}" readonly required style="border:none;"></td>
+            <td><input type="number" name="Items[${index}].Quantity" value="${quantity}" readonly required style="border:none;"></td>
+            <td><button class="removebtn addbtn" type="button">Remove</button></td>`;
+
+            tr.querySelector('.removebtn').addEventListener('click', function () {
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You won't be able to revert this!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes, delete it!"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        tr.remove();
+                        Swal.fire({
+                            title: "Deleted!",
+                            text: "Your file has been deleted.",
+                            icon: "success"
+                        });
+
+
+                    }    
+                });
+           
+            });
+
+            tbody.appendChild(tr);
+
+            document.getElementById('productName').value = '';
+            document.getElementById('Price').value = '';
+            document.getElementById('Quantity').value = '';
+        } else {
+            alert('Please fill out all fields.');
+        }
+    });
+
+
+
+  
+
+
+</script>

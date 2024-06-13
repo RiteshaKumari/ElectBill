@@ -13,7 +13,7 @@ namespace ElectBill.Models
         
 
       
-        const string dbo_schema = "admin_kashishdb";//---------????????????
+       // const string dbo_schema = "admin_kashishdb";
         private static object lockObject = new object();
         string CS = string.Empty;
 
@@ -30,7 +30,7 @@ namespace ElectBill.Models
         {
             using (SqlConnection con = new SqlConnection(CS))
             {
-                using (SqlDataAdapter tda = new SqlDataAdapter(dbo_schema + "." + procedure, con))
+                using (SqlDataAdapter tda = new SqlDataAdapter("dbo" + "." + procedure, con))
                 {
                     tda.SelectCommand.CommandType = CommandType.StoredProcedure;
                     foreach (SqlParameter param in sqlParameters)
@@ -55,7 +55,7 @@ namespace ElectBill.Models
             using (SqlConnection con = new SqlConnection(CS))
             {
 
-                using (SqlCommand cmd = new SqlCommand(dbo_schema + "." + procedure, con))
+                using (SqlCommand cmd = new SqlCommand("dbo" + "." + procedure, con))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     foreach (SqlParameter param in _Sqlparam)
@@ -79,7 +79,7 @@ namespace ElectBill.Models
         {
             using (SqlConnection con = new SqlConnection(CS))
             {
-                using (SqlDataAdapter tda = new SqlDataAdapter(dbo_schema + "." + procedure, con))
+                using (SqlDataAdapter tda = new SqlDataAdapter("dbo" + "." + procedure, con))
                 {
                     tda.SelectCommand.CommandType = CommandType.StoredProcedure;
                     DataTable DT = new DataTable();
@@ -99,7 +99,7 @@ namespace ElectBill.Models
         {
             using (SqlConnection con = new SqlConnection(CS))
             {
-                using (SqlDataAdapter tda = new SqlDataAdapter(dbo_schema + "." + procedure, con))
+                using (SqlDataAdapter tda = new SqlDataAdapter("dbo" + "." + procedure, con))
                 {
                     tda.SelectCommand.CommandType = CommandType.StoredProcedure;
                     foreach (SqlParameter param in sqlParameters)
@@ -123,7 +123,7 @@ namespace ElectBill.Models
         {
             using (SqlConnection con = new SqlConnection(CS))
             {
-                using (SqlCommand cmd = new SqlCommand(dbo_schema + "." + procedure.ToString(), con))
+                using (SqlCommand cmd = new SqlCommand("dbo" + "." + procedure.ToString(), con))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     foreach (SqlParameter para in _SqlParam)
@@ -142,7 +142,7 @@ namespace ElectBill.Models
         {
             using (SqlConnection con = new SqlConnection(CS))
             {
-                using (SqlCommand cmd = new SqlCommand(dbo_schema + "." + procedure.ToString(), con))
+                using (SqlCommand cmd = new SqlCommand("dbo" + "." + procedure.ToString(), con))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     foreach (SqlParameter para in _SqlParam)

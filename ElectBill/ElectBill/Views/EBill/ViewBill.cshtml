@@ -1,5 +1,7 @@
-﻿
-@model ElectBill.Models.BillDetail
+﻿@model ElectBill.Models.BillDetail
+@{
+    Layout = "~/Views/Shared/_Print.cshtml";
+}
 
 <style>
     .box {
@@ -11,11 +13,13 @@
 
     .cont {
         padding: 20px;
-        box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+        /*box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);*/
+        /*border:1px solid black;*/
         width: 80%;
         margin: 30px auto;
         padding: 20px 50px;
     }
+
     .content-table {
         border-collapse: collapse;
         margin: 25px 0;
@@ -54,16 +58,22 @@
                 font-weight: bold;
                 color: #009879;
             }
+
     .totamt {
         display: flex;
         justify-content: flex-end;
         padding-right: 40px;
     }
+
+    .addbtn {
+        position: relative;
+        left: 200px;
+    }
 </style>
 
 <div class="cont">
     <h1>Customer Bill</h1>
-    
+
     <div class="box">
         <div>
 
@@ -91,7 +101,8 @@
     </div>
 
     <table class="content-table">
-        <thead>
+        <thead style=" background-color: #009879 !important;">
+
             <tr>
                 <th>Id</th>
                 <th>Product Name</th>
@@ -100,17 +111,34 @@
             </tr>
         </thead>
         <tbody>
-          @foreach (var item in Model.Items) {
-            <tr @*class="active-row"*@>
-                <td>@item.Id</td>
-                <td>@item.Prod_Name</td>
-                <td>@item.Price</td>
-                <td>@item.Quantity</td>
-            </tr>
-          }
+            @foreach (var item in Model.Items)
+            {
+                <tr @*class="active-row"*@>
+                    <td>@item.Id</td>
+                    <td>@item.Prod_Name</td>
+                    <td>@item.Price</td>
+                    <td>@item.Quantity</td>
+                </tr>
+            }
         </tbody>
     </table>
     <div class="totamt">
         <p>Total Amount: @Model.Total_Amount</p>
     </div>
 </div>
+
+<button onclick="printfun()" class="addbtn printbtn">
+    Print
+</button>
+
+<script>
+    function printfun() {
+        $(".printbtn").hide();
+        //var body = document.querySelector("body").innerHTML;
+        //var data = document.querySelector(".cont").innerHTML;
+        //document.querySelector("body").innerHTML = data;
+        window.print();
+        //document.querySelector("body").innerHTML = body;
+
+    }
+</script>

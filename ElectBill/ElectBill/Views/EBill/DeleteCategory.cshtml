@@ -1,0 +1,36 @@
+﻿@model ElectBill.Models.BillDetail
+<style>
+    .box {
+        margin: 0px auto;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+        width: 50%;
+        padding: 30px;
+    }
+
+    ul {
+        padding-top: 5px;
+        list-style-type: none;
+    }
+</style>
+
+<div class="box">
+    <h2>Are you sure you want to delete this category ?</h2>
+
+    <ul>
+    
+
+        <li>
+            @Html.DisplayNameFor(m => m.Cust_Name):  @Html.DisplayFor(m => m.Cust_Name)
+        </li>
+
+    </ul>
+
+    @using (Html.BeginForm())
+    {
+        //@Html.AntiForgeryToken();
+        <button type="submit">Delete</button>
+        @*@Html.ActionLink("Back To List", "Category", "Home", new { area = "" }, new { @class = "" })*@
+        <p style="color:red;">@TempData["alert"]</p>
+        <p style="color:green;">@TempData["alertonList"]</p>
+    }
+</div>
