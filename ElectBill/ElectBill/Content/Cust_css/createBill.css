@@ -63,11 +63,11 @@ th, td {
 
 
 table tr:nth-child(even) {
-    background-color: #eee !important;
+    background-color: white !important;
 }
 
 table tr:nth-child(odd) {
-    background-color: #fff !important;
+    background-color: white !important;
 }
 
 table th {
@@ -96,7 +96,6 @@ table th {
     z-index: 10;
 }
 
-
 .overlay {
     position: fixed;
     display: none;
@@ -111,7 +110,6 @@ table th {
     z-index: 2;
     cursor: pointer;
 }
-
 
 .CreateBcontainer {
     width: 80%;
@@ -147,7 +145,7 @@ table th {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    padding-top: 25px;
+    padding-top:0px !important;
 }
 
 @media screen and (max-width: 600px) {

@@ -12,6 +12,7 @@ namespace ElectBill.Models
         public int cust_Id { get; set; }
         [Required]
         public string cust_Name { get; set; }
+
         [Required]
         public string cust_Mobile { get; set; }
         [Required]

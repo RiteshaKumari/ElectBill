@@ -156,6 +156,7 @@ namespace ElectBill.Controllers
                 return View();
         }
 
+        [Authorize]
         [Route("CreateBill")]
         [HttpPost]
 
@@ -164,8 +165,7 @@ namespace ElectBill.Controllers
             Response.Cache.SetCacheability(HttpCacheability.NoCache);
             Response.Cache.SetExpires(DateTime.UtcNow.AddHours(-1));
             Response.Cache.SetNoStore();
-            if (ModelState.IsValid)
-            {
+          
                 if (Request.IsAuthenticated && Request.Cookies["Email"] != null)
                 {
                     TempData["logindata"] = Request.Cookies["Email"].Value;
@@ -174,16 +174,16 @@ namespace ElectBill.Controllers
 
                     Response.Cookies["Email"].Value = userEmail;
                 }
-            }
-            if (ModelState.IsValid) {
+            
+        
             try
             {
                     List<Customer> res = new List<Customer>();
                     SqlParameter[] parameter1 = new SqlParameter[]
                    {
                             new SqlParameter("@Cust_Name", cust.cust_Name),
-                            new SqlParameter("@Mobile", cust.cust_Mobile),
-                            new SqlParameter("@Address", cust.cust_Address)
+                            new SqlParameter("@Mobile", cust.cust_Mobile)
+                    
                    };
                     var bookingprint = us.fn_DataTable("saveCustDetail", parameter1).AsEnumerable().Select(s => new Customer
                     {
@@ -236,17 +236,14 @@ namespace ElectBill.Controllers
                     TempData["message"] = ex.Message;
                    
                 }
-            }
-            else
-            {
-                TempData["message"] = "Something went wrong !";
-                return View();
-            }
-           return RedirectToAction("Invoice", "Home", new { id = TempData["detailviewID"] });
+        
+          
+return RedirectToAction("Invoice", "Home", new { id = TempData["detailviewID"] });
            // return View();
       }
 
         [Route("DetailInRow")]
+        [Authorize]
         public ActionResult DetailInRow()
         {
             Response.Cache.SetCacheability(HttpCacheability.NoCache);
@@ -289,6 +286,7 @@ namespace ElectBill.Controllers
         }
 
         [Route("DeleteRow")]
+        [Authorize]
         public ActionResult DeleteRow(int? Id, bool? confirm)
         {
           
@@ -331,6 +329,7 @@ namespace ElectBill.Controllers
         }
 
         [Route("Cancel")]
+        [Authorize]
         public ActionResult Cancel(int? Id, bool? confirm)
         {
 
@@ -388,7 +387,7 @@ namespace ElectBill.Controllers
                     detail.cust_Id = int.Parse(reader["BillId"].ToString());
                     detail.cust_Name = reader["cust_Name"].ToString();
                     detail.cust_Mobile = reader["cust_Mobile"].ToString();
-                    detail.cust_Address = reader["cust_Address"].ToString();
+                  
                     detail.totalPrice = int.Parse(reader["Totalprice"].ToString());
                     ItemDetail item = new ItemDetail();
                     item.Item_Id = int.Parse(reader["ItemId"].ToString());
@@ -410,6 +409,7 @@ namespace ElectBill.Controllers
         }
 
         [Route("ConvertToPDF")]
+        [Authorize]
         public ActionResult ConvertToPDF(int id)
         {
             var printpdf = new ActionAsPdf("InvoiceDownload", new { id = id });
@@ -478,6 +478,7 @@ namespace ElectBill.Controllers
         }
 
         [Route("InvoiceDownload")]
+        [Authorize]
         public ActionResult InvoiceDownload(int id)
         {
 
@@ -583,6 +584,7 @@ namespace ElectBill.Controllers
         }
 
         [Route("EditBill")]
+        [Authorize]
         public ActionResult EditBill(string OID)
         {
              Response.Cache.SetCacheability(HttpCacheability.NoCache);
@@ -606,8 +608,8 @@ namespace ElectBill.Controllers
                 BillId = s.Field<int>("cust_Id"),
                 OID = s.Field<string>("OID"),
                 cust_Name = s.Field<string>("cust_Name"),
-                cust_Mobile = s.Field<string>("cust_Mobile"),
-                cust_Address = s.Field<string>("cust_Address")
+                cust_Mobile = s.Field<string>("cust_Mobile")
+               
 
 
             }).ToList();
@@ -638,7 +640,7 @@ namespace ElectBill.Controllers
 
             return View();
         }
-
+        [Authorize]
         [HttpPost]
         [Route("EditBill")]
         public ActionResult EditBill(string OID, Customer cust)
