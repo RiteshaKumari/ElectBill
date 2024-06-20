@@ -3,7 +3,7 @@
     text-align: center;
 }
 
-input[type=text], select, textarea {
+input[type=text], input[type=number], select, textarea {
     width: 100%;
     padding: 12px;
     border: 1px solid #ccc;
@@ -78,7 +78,7 @@ table th {
 .itemhead {
     display: flex;
     justify-content: space-between;
-    margin-top: 34px;
+  
 }
 
 
@@ -124,7 +124,7 @@ table th {
 }
 
 .billpart {
-    width: 60%;
+    width: 100%;
 }
 
 .row {
@@ -137,16 +137,16 @@ table th {
 
 .rows {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     flex-wrap: wrap;
 }
 
-.fullpart {
+/*.fullpart {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
     padding-top:0px !important;
-}
+}*/
 
 @media screen and (max-width: 600px) {
     .col-25, .col-75, input[type=submit] {
@@ -155,26 +155,26 @@ table th {
     }
 
     .billpart {
-        width: 100%;
+        width: 100% !important;
     }
 
     .row {
         width: 100%;
     }
 
-    .rows {
+ /*   .rows {
         display: flex;
         justify-content: space-between;
         flex-wrap: wrap;
-    }
+    }*/
 
     .popdesign {
         width: 100%;
     }
 
-    .fullpart {
+  /*  .fullpart {
         flex-direction: column-reverse;
-    }
+    }*/
 }
 
 .text-danger {

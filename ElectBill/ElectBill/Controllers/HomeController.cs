@@ -11,6 +11,10 @@ using System.Web.Mvc;
 using System.Web.Security;
 using ElectBill.Models;
 using Rotativa;
+using QRCoder;
+using System.IO;
+using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace ElectBill.Controllers
 {
@@ -19,7 +23,45 @@ namespace ElectBill.Controllers
         Utility us = new Utility();
         SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["mycon"].ConnectionString);
 
-         public ActionResult Index()
+        private void loadbag()
+        {
+
+            List<Customer> Res = new List<Customer>();
+
+            DataSet DS = us.fn_DataSet("ProddropDown");
+            var Book = DS.Tables[0];
+            var Res2 = Book.AsEnumerable().Select(s => new Customer
+            {
+                ProductId = s.Field<int>("ProductId"),
+                ProductName = s.Field<string>("ProductName"),
+                ProductPrice = s.Field<int>("ProductPrice")
+
+            }).ToList();
+            //ViewBag.AllProduct = new SelectList(Res2, "ProductId", "ProductName");
+            ViewBag.AllProduct = new SelectList(Res2, "ProductName", "ProductName");
+        }
+
+        [HttpGet]
+        public ActionResult GetPriceForProduct(string productName)
+        {
+            try
+            {
+                SqlParameter[] parameters = new SqlParameter[]
+                {
+                new SqlParameter("@productName", productName),
+                };
+
+                var price = (int)us.func_ExecuteScalar("getPrice", parameters); 
+
+                return Json(price, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                TempData["deletealert"] = ex.Message;
+                return Json(0, JsonRequestBehavior.AllowGet); 
+            }
+        }
+        public ActionResult Index()
         {
             return View();
         }
@@ -28,45 +70,46 @@ namespace ElectBill.Controllers
         [HttpGet]
         public ActionResult Login()
         {
-            // Login user = new Login();
+            var domain = Request.Url.Host;
+            System.Diagnostics.Debug.WriteLine("Current Domain: " + domain);
+            Login user = new Login();
 
-            //if (Request.Cookies["email"] != null) //-----------null problem
-            //{
+            if (Request.Cookies["email"] != null)
+            {
+              
+                List<Login> res = new List<Login>();
+                SqlParameter[] parameters = new SqlParameter[]
+                   {
+                    new SqlParameter("@Email", Request.Cookies["email"].Value),
+                   };
 
-
-            //    List<Login> res = new List<Login>();
-            //    SqlParameter[] parameters = new SqlParameter[]
-            //       {
-            //        new SqlParameter("@email", Request.Cookies["email"].Value),
-
-
-            //       };
-
-            //    var res1 = us.fn_DataTable("getstaffdata", parameters).AsEnumerable().Select(s => new getStaffdata
-            //    {
-
-            //        StaffID = s.Field<int>("StaffId"),
-            //        StaffName = s.Field<string>("StaffName"),
-            //        StaffPass = s.Field<string>("StaffPass")
-
-            //    }).ToList();
-            //    ViewBag.staDetail = res1;
-            //    user.Email = Request.Cookies["email"].Value;
-            //    foreach (var item in ViewBag.staDetail)
-            //    {
-            //        user.Pass = item.Pass;
-            //    }
-            //    return View(user);
-            // }
+                var res1 = us.fn_DataTable("getStaffdata", parameters).AsEnumerable().Select(s => new getStaffdata
+                {
+                    StaffID = s.Field<int>("StaffId"),
+                    StaffName = s.Field<string>("StaffName"),
+                    StaffPass = s.Field<string>("StaffPass"),
+                    StaffToken = s.Field<string>("StaffToken")
+                }).ToList();
+                ViewBag.staDetail = res1;
+                user.Email = Request.Cookies["email"].Value;
+                foreach (var item in ViewBag.staDetail)
+                {
+                    user.Pass = item.StaffPass;
+                }
+                return View(user);
+               // return RedirectToAction("CreateBill","Home");
+            }
+          
             return View();
         }
+
 
         [Route("Login")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Login(Login log)
         {
-
+          
             if (ModelState.IsValid)
             {
                 SqlParameter[] parameters1 = new SqlParameter[]
@@ -79,18 +122,32 @@ namespace ElectBill.Controllers
 
                 if (isValid > 0)
                 {
+
+                    FormsAuthentication.SetAuthCookie(log.Email, true);
                     if (Request.Cookies["Email"] != null)
                     {
                         Response.Cookies["Email"].Value = log.Email;
                     }
                     else
                     {
-                        HttpCookie emailCookie = new HttpCookie("Email", log.Email);
-                        emailCookie.Expires = DateTime.Now.AddDays(1);
+                        //  HttpCookie emailCookie = new HttpCookie("Email", log.Email);
+                        //  emailCookie.Expires = DateTime.Now.AddDays(10);
+
+                        HttpCookie emailCookie = new HttpCookie("Email", log.Email)
+                        {
+                            Expires = DateTime.Now.AddDays(10),
+                            HttpOnly = true,
+                            // Secure = false,
+                            Domain = Request.Url.Host,
+                            Secure = Request.IsSecureConnection,
+                           // Domain = "localhost:44307",
+                            Path = "/"
+                        };
+                     //   emailCookie.Secure = false; 
+                      //  emailCookie.HttpOnly = true;
                         Response.Cookies.Add(emailCookie);
                     }
 
-                    FormsAuthentication.SetAuthCookie(log.Email, false);
                     ModelState.Clear();
                     TempData["mes"] = "done";
                     ViewBag.Messagelog = "Successfully Login !";
@@ -134,8 +191,9 @@ namespace ElectBill.Controllers
             // Redirect to the home page
             return RedirectToAction("Index", "Home");
         }
-        [Authorize]
+      
         [Route("CreateBill")]
+        [Authorize]
         [HttpGet]
         public ActionResult CreateBill()
         {
@@ -152,12 +210,18 @@ namespace ElectBill.Controllers
 
                     Response.Cookies["Email"].Value = userEmail;
                 }
+                else
+                {
+                    return Redirect("login");
+                }
             }
-                return View();
+            loadbag();
+            return View();
         }
 
-        [Authorize]
+       
         [Route("CreateBill")]
+        [Authorize]
         [HttpPost]
 
         public ActionResult CreateBill(Customer cust)
@@ -170,77 +234,87 @@ namespace ElectBill.Controllers
                 {
                     TempData["logindata"] = Request.Cookies["Email"].Value;
                     var userEmail = Request.Cookies["Email"].Value;
-
-
                     Response.Cookies["Email"].Value = userEmail;
                 }
-            
-        
-            try
+
+            if (ModelState.IsValid)
             {
-                    List<Customer> res = new List<Customer>();
-                    SqlParameter[] parameter1 = new SqlParameter[]
-                   {
-                            new SqlParameter("@Cust_Name", cust.cust_Name),
-                            new SqlParameter("@Mobile", cust.cust_Mobile)
-                    
-                   };
-                    var bookingprint = us.fn_DataTable("saveCustDetail", parameter1).AsEnumerable().Select(s => new Customer
+                if (cust.Items.Count != 0)
+                {
+                    try
                     {
-                        cust_Id = s.Field<int>("cust_Id"),
-                        OID = s.Field<string>("OID")
-                    }).FirstOrDefault();
-                    ViewBag.book = bookingprint;
-                      TempData["detailviewid"] = bookingprint.cust_Id;
-
-                    if (bookingprint != null)
-                    {
-                        float totalPrice = 0;
-
-                        foreach (var product in cust.Items)
+                        List<Customer> res = new List<Customer>();
+                        SqlParameter[] parameter1 = new SqlParameter[]
                         {
-                            totalPrice += product.Item_Price * product.Quantity;
-                            SqlParameter[] productParameters = new SqlParameter[]
+                      new SqlParameter("@Cust_Name", cust.cust_Name),
+                      new SqlParameter("@Mobile", cust.cust_Mobile)
+                        };
+                        var bookingprint = us.fn_DataTable("saveCustDetail", parameter1).AsEnumerable().Select(s => new Customer
+                        {
+                            cust_Id = s.Field<int>("cust_Id"),
+                            OID = s.Field<string>("OID")
+                        }).FirstOrDefault();
+                        ViewBag.book = bookingprint;
+                        TempData["detailviewid"] = bookingprint.cust_Id;
+
+                        if (bookingprint != null)
+                        {
+                            float totalPrice = 0;
+
+                            foreach (var product in cust.Items)
                             {
+                                totalPrice += product.Item_Price * product.Quantity;
+                                SqlParameter[] productParameters = new SqlParameter[]
+                                {
                               new SqlParameter("@customerId",bookingprint.cust_Id),
                               new SqlParameter("@OID", bookingprint.OID),
                               new SqlParameter("@Item_Name", product.Item_Name),
                               new SqlParameter("@Item_Price", product.Item_Price),
                               new SqlParameter("@Quantity", product.Quantity)
-                            };
-                            us.fn_DataTable("saveItemDetail", productParameters);
+                                };
+                                us.fn_DataTable("saveItemDetail", productParameters);
 
-                            SqlParameter[] updateParameters = new SqlParameter[]
-                            {
+                                SqlParameter[] updateParameters = new SqlParameter[]
+                                {
                                 new SqlParameter("@cust_Id", bookingprint.cust_Id),
                                 new SqlParameter("@Totalprice", totalPrice)
-                             };
+                                };
 
-                            us.fn_DataTable("updateCustTotalPrice", updateParameters);
-                            TempData["alertsuccess"] = "Data Saved successfully !";
+                                us.fn_DataTable("updateCustTotalPrice", updateParameters);
+                                TempData["alertsuccess"] = "Data Saved successfully !";
+                              
+                            }
+                            return RedirectToAction("Invoice", "Home", new { id = TempData["detailviewID"] });
                         }
+                        else
+                        {
+                            TempData["message"] = "Customer Detail not saved !";
+                        }
+
+
+                        ModelState.Clear();
+
+
                     }
-                    else
+                    catch (Exception ex)
                     {
+                        TempData["message"] = ex.Message;
 
-                        TempData["message"] = "Customer Detail not saved !";
                     }
-                
-              
-                   ModelState.Clear();
-
-              
-            }
-                catch (Exception ex)
-                {
-                    TempData["message"] = ex.Message;
-                   
                 }
-        
-          
-return RedirectToAction("Invoice", "Home", new { id = TempData["detailviewID"] });
-           // return View();
-      }
+                else
+                {
+                    TempData["message"] = "Please Enter atleast one Item !";
+                }
+            }
+            else
+            {
+                TempData["message"] = "Please Enter valid data !";
+            }
+
+           loadbag();
+           return View();
+           }
 
         [Route("DetailInRow")]
         [Authorize]
@@ -260,6 +334,10 @@ return RedirectToAction("Invoice", "Home", new { id = TempData["detailviewID"] }
 
                     Response.Cookies["Email"].Value = userEmail;
                 }
+                else
+                {
+                    return Redirect("login");
+                }
 
                 List<Customer> Res = new List<Customer>();
 
@@ -276,7 +354,7 @@ return RedirectToAction("Invoice", "Home", new { id = TempData["detailviewID"] }
                     status = s.Field<string>("status"),
                     cust_Mobile = s.Field<string>("cust_Mobile"),
                     totalPrice = s.IsNull("Totalprice") ? (float?)null : Convert.ToSingle(s["Totalprice"]),
-                  //  status = s.IsNull("status") ||s["status"].ToString().Length != 1 ?   'N' : Convert.ToChar(s["status"]) // Handling invalid status
+                //  status = s.IsNull("status") ||s["status"].ToString().Length != 1 ?   'N' : Convert.ToChar(s["status"])   // Handling invalid status
            
                 }).ToList();
 
@@ -329,7 +407,7 @@ return RedirectToAction("Invoice", "Home", new { id = TempData["detailviewID"] }
         }
 
         [Route("Cancel")]
-        [Authorize]
+     
         public ActionResult Cancel(int? Id, bool? confirm)
         {
 
@@ -387,15 +465,30 @@ return RedirectToAction("Invoice", "Home", new { id = TempData["detailviewID"] }
                     detail.cust_Id = int.Parse(reader["BillId"].ToString());
                     detail.cust_Name = reader["cust_Name"].ToString();
                     detail.cust_Mobile = reader["cust_Mobile"].ToString();
-                  
+                    detail.Date = reader["Date"].ToString() ;
                     detail.totalPrice = int.Parse(reader["Totalprice"].ToString());
+                   
                     ItemDetail item = new ItemDetail();
                     item.Item_Id = int.Parse(reader["ItemId"].ToString());
                     item.Item_Name = reader["Item_Name"].ToString();
                     item.Item_Price = int.Parse(reader["Item_Price"].ToString());
                     item.Quantity = int.Parse(reader["Quantity"].ToString());
                     detail.Items.Add(item);
+
+                    using ( MemoryStream ms = new MemoryStream())
+                    {
+                        QRCodeGenerator qrGenerator = new QRCodeGenerator();
+                        QRCodeData qrData = qrGenerator.CreateQrCode($"Customer Name:{reader["cust_Name"]}, Cust_OID:{reader["OID"]}, Cust_Mobile:{reader["cust_Mobile"]}", QRCodeGenerator.ECCLevel.Q);
+                        QRCode qRCode = new QRCode(qrData);
+                        using (Bitmap bitmap = qRCode.GetGraphic(20)) //-----20 ke jagah id bhi ho sakta
+                        {
+                            bitmap.Save(ms, ImageFormat.Png);
+                            ViewBag.QRCodeImage = "data:image/png;base64," + Convert.ToBase64String(ms.ToArray());
+                        }
+                    }
                 }
+              
+
             }
             catch (Exception)
             {
@@ -409,12 +502,47 @@ return RedirectToAction("Invoice", "Home", new { id = TempData["detailviewID"] }
         }
 
         [Route("ConvertToPDF")]
-        [Authorize]
         public ActionResult ConvertToPDF(int id)
         {
-            var printpdf = new ActionAsPdf("InvoiceDownload", new { id = id });
-            return printpdf;
+            Response.Cache.SetCacheability(HttpCacheability.NoCache);
+            Response.Cache.SetExpires(DateTime.UtcNow.AddHours(-1));
+            Response.Cache.SetNoStore();
+
+            if (Request.IsAuthenticated && Request.Cookies["Email"] != null)
+            {
+                TempData["logindata"] = Request.Cookies["Email"].Value;
+                var userEmail = Request.Cookies["Email"].Value;
+                Response.Cookies["Email"].Value = userEmail;
+                var printpdf = new ActionAsPdf("InvoiceDownload", new { id = id, email = userEmail });
+                return printpdf;
+            }
+            else
+            {
+                return Redirect("login");
+            }
         }
+        [Route("InvoiceDownload")]
+        [Authorize]
+        public ActionResult InvoiceDownload(int id, string email)
+        {
+            Response.Cache.SetCacheability(HttpCacheability.NoCache);
+            Response.Cache.SetExpires(DateTime.UtcNow.AddHours(-1));
+            Response.Cache.SetNoStore();
+
+            if (Request.IsAuthenticated && !string.IsNullOrEmpty(email))
+            {
+                var userEmail = email;
+                Response.Cookies["Email"].Value = userEmail;
+            }
+            else
+            {
+                return Redirect("login");
+            }
+
+            var details = GetoneBillDetail(id);
+            return View(details);
+        }
+
 
         [Route("Invoice")]
         public ActionResult Invoice(int id)
@@ -431,113 +559,17 @@ return RedirectToAction("Invoice", "Home", new { id = TempData["detailviewID"] }
 
                     Response.Cookies["Email"].Value = userEmail;
                 }
-
-            var details = GetoneBillDetail(id);
-            return View(details);
-           // return View();
-
-            //    List<Customer> Res = new List<Customer>();
-            //    SqlParameter[] parameters = new SqlParameter[]
-            //   {
-            //            new SqlParameter("@Id", id),
-
-            //   };
-            //    var custDetail = us.fn_DataTable("getCustDetail", parameters).AsEnumerable().Select(s => new Customer
-            //    {
-            //        cust_Id = s.Field<int>("cust_Id"),
-            //        cust_Name = s.Field<string>("cust_Name"),
-            //        cust_Mobile = s.Field<string>("cust_Mobile"),
-            //        cust_Address = s.Field<string>("cust_Address"),
-            //      totalPrice = s.IsNull("ToatalPrice") ? (float?)null : Convert.ToSingle(s["ToatalPrice"]),
-
-            //    }).FirstOrDefault();
-            //    ViewBag.CustDetail = custDetail;
-
-
-        //    SqlParameter[] parameter1 = new SqlParameter[]
-        //{
-        //                new SqlParameter("@Id", id),
-
-        //};
-        //    DataSet DS = us.fn_DataSet("getCustItems", parameter1);
-        //    var Book = DS.Tables[0];
-
-        //    var Res1 = Book.AsEnumerable().Select(s => new ItemDetail
-        //    {
-        //        Item_Id = s.Field<int>("Item_Id"),
-        //        Item_Name = s.Field<string>("Item_Name"),
-        //        Item_Price = s.Field<int>("Item_Price"),
-        //        Quantity = s.Field<int>("Quantity")
-
-        //    }).ToList();
-
-        //    ViewBag.ItemDetail = Res1;
-
-
-            // return View();  
-        }
-
-        [Route("InvoiceDownload")]
-        [Authorize]
-        public ActionResult InvoiceDownload(int id)
-        {
-
-            Response.Cache.SetCacheability(HttpCacheability.NoCache);
-            Response.Cache.SetExpires(DateTime.UtcNow.AddHours(-1));
-            Response.Cache.SetNoStore();
-            if (Request.IsAuthenticated && Request.Cookies["Email"] != null)
+            else
             {
-                TempData["logindata"] = Request.Cookies["Email"].Value;
-                var userEmail = Request.Cookies["Email"].Value;
-
-
-                Response.Cookies["Email"].Value = userEmail;
+                return Redirect("login");
             }
 
             var details = GetoneBillDetail(id);
             return View(details);
-            // return View();
-
-            //    List<Customer> Res = new List<Customer>();
-            //    SqlParameter[] parameters = new SqlParameter[]
-            //   {
-            //            new SqlParameter("@Id", id),
-
-            //   };
-            //    var custDetail = us.fn_DataTable("getCustDetail", parameters).AsEnumerable().Select(s => new Customer
-            //    {
-            //        cust_Id = s.Field<int>("cust_Id"),
-            //        cust_Name = s.Field<string>("cust_Name"),
-            //        cust_Mobile = s.Field<string>("cust_Mobile"),
-            //        cust_Address = s.Field<string>("cust_Address"),
-            //      totalPrice = s.IsNull("ToatalPrice") ? (float?)null : Convert.ToSingle(s["ToatalPrice"]),
-
-            //    }).FirstOrDefault();
-            //    ViewBag.CustDetail = custDetail;
-
-
-            //    SqlParameter[] parameter1 = new SqlParameter[]
-            //{
-            //                new SqlParameter("@Id", id),
-
-            //};
-            //    DataSet DS = us.fn_DataSet("getCustItems", parameter1);
-            //    var Book = DS.Tables[0];
-
-            //    var Res1 = Book.AsEnumerable().Select(s => new ItemDetail
-            //    {
-            //        Item_Id = s.Field<int>("Item_Id"),
-            //        Item_Name = s.Field<string>("Item_Name"),
-            //        Item_Price = s.Field<int>("Item_Price"),
-            //        Quantity = s.Field<int>("Quantity")
-
-            //    }).ToList();
-
-            //    ViewBag.ItemDetail = Res1;
-
-
-            // return View();  
+          
         }
+
+       
 
 
         [Route("DeleteItem")]
@@ -595,6 +627,10 @@ return RedirectToAction("Invoice", "Home", new { id = TempData["detailviewID"] }
                 TempData["logindata"] = Request.Cookies["email"].Value;
                 var useremail = Request.Cookies["email"].Value;
                 Response.Cookies["email"].Value = useremail;
+            }
+            else
+            {
+                return Redirect("login");
             }
             List<editBill> res = new List<editBill>();
             SqlParameter[] parameters = new SqlParameter[]

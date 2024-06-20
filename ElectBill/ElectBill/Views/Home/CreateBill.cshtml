@@ -1,5 +1,4 @@
-﻿@*@model ElectBill.Models.BillDetail*@
-@model ElectBill.Models.Customer
+﻿@model ElectBill.Models.Customer
 @using System.Web.Mvc
 @using ElectBill.Models
 
@@ -23,7 +22,7 @@
     }
     .itemhead {
         margin-top: 0px;
-        margin-bottom: 5px;
+       
     }
     .addbtn {
         display: inline-block;
@@ -61,13 +60,29 @@
         overflow-y: auto;
         /*overflow:auto;*/
     }
+    .displayrow {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .roww{
+        width:25%;
+
+    }
+    .rowdetail {
+        margin: 0 47px 0 0;
+        width: 25%;
+    }
+    .itemshead{
+        margin-top:10px;
+    }
         
 </style>
 
 <div class="CreateBcontainer">
 
     <h3 style="color:green;">@TempData["alertsuccess"]</h3>
-   
+    <p style="color:red;">@TempData["message"]</p>
     <div class="fullpart">
         <div class="billpart">
 
@@ -76,84 +91,92 @@
                 <div class="itemhead">
                     <h3>Customer Details</h3>
                     <div>
-                        <button class="addbtn" type="submit">Save All Details</button>
+                        <button class="addbtn" type="submit" style="width: 155px !important;height: 38px;">Save All Details</button>
                     </div>
 
                 </div>
                 <div class="rows">
-                    <div class="row">
+                    <div class="rowdetail">
 
-                        @* @Html.HiddenFor(e => e.Id)*@
-                        @*<label >Customer Name</label>*@
+                   
                         @Html.TextBoxFor(e => e.cust_Name, null, new { placeholder = "Customer Name", @class = "form-control" })
                         @Html.ValidationMessageFor(e => e.cust_Name, null, new { @class = "text-danger " })
                     </div>
-                    <div class="row">
+                    <div class="rowdetail">
 
-                       @* <label >Mobile</label>*@
+                      
                         @Html.TextBoxFor(e => e.cust_Mobile, null, new { placeholder = "Mobile", @class = "form-control" })
                         @Html.ValidationMessageFor(e => e.cust_Mobile, null, new { @class = "text-danger " })
                     </div>
                 </div>
-           
-
-                <div class="itemheaditem">
-                    <h3>Item List</h3>
-                    <div>
-                        <p style="color:red;">@TempData["message"]</p>
-                    </div>
+              
+                <div class="itemshead">
+                    <h3>Item Details</h3>
+                    @*<div>
+                        <button class="addbtn" type="submit">Save All Details</button>
+                    </div>*@
 
                 </div>
+                <div class="displayrow">
+                    <div class="roww" >
+                      @* <input type="text" id="productName" placeholder="Product Name" >*@
+                          @Html.DropDownListFor(model => model.ProductName, ViewBag.AllProduct as SelectList, "Select Products", new { @class = "form-control", id= "productName" })
+                  
+                    </div>
+                    <div class="roww">
+
+                        <input type="number" id="Price" placeholder="Price" >
+                    </div>
+                    <div class="roww">
+
+                        <input  type="number" id="Quantity" placeholder="Quantity" >
+                    </div>
+                    
+                        <button class="addbtn" type="button" id="addbutton" style="width: 155px !important; height: 38px;">Add</button>
+                  
+                </div>
+                <!--<div class="popdesign">
+                    <h3>Item Details</h3>
+                    <div class="row">-->
+                        @*  <label for="productName">Product Name</label>*@
+                        <!--<input type="text" id="productName" placeholder="Product Name" required>-->
+                          @*@Html.DropDownListFor(model => model.ProductName, ViewBag.AllProduct as SelectList, "Select Products", new { @class = "form-control", id= "productName" })*@
+                  
+                <!--</div>
+                    <div class="row" style=" margin-bottom: 5px;">-->
+                        @*   <label for="Price">Price</label>*@
+                        <!--<input type="number" id="Price" placeholder="Price" required>
+                    </div>
+                    <div class="row">-->
+                        @*  <label for="Quantity">Quantity</label>*@
+
+                        <!--<input style="padding-bottom:5px;" type="number" id="Quantity" placeholder="Quantity" required>
+                    </div>
+                    <div class="row" style="margin-top:20px;">
+                        <button class="addbtn" type="button" id="addbutton">Add</button>-->
+
+                        @* <button class="addbtn" type="button" onclick="closepop()" style="background:red;box-shadow:none;">Close</button>*@
+                    <!--</div>
+                </div>-->
+
+                @*<div class="itemheaditem">
+                <h3>Item List</h3>
+                <div>
+
+                </div>
+
+            </div>*@
                 <table id="items">
                     <thead>
                         <tr><th>Product Name</th><th>Price</th><th>Quantity</th><th></th></tr>
                     </thead>
                     <tbody>
-                     
                     </tbody>
                 </table>
             }
 
         </div>
-        <div class="popdesign">
-            <h3>Item Details</h3>
-            <div class="row">
-
-              @*  <label for="productName">Product Name</label>*@
-
-
-
-                <input type="text" id="productName" placeholder="Product Name" required>
-                @*  @Html.DropDownListFor(model => model.ProdName, ViewBag.AllProduct as SelectList, "Select Products", new { @class = "form-control" })*@
-            </div>
-            <div class="row">
-
-             @*   <label for="Price">Price</label>*@
-
-
-
-                <input type="text" id="Price" placeholder="Price" required>
-
-            </div>
-            <div class="row">
-
-              @*  <label for="Quantity">Quantity</label>*@
-
-
-
-                <input type="text" id="Quantity" placeholder="Quantity" required>
-
-            </div>
-            <div class="row" style="margin-top:20px;">
-                <button class="addbtn" type="button" id="addbutton">Add</button>
-
-
-
-
-
-                @* <button class="addbtn" type="button" onclick="closepop()" style="background:red;box-shadow:none;">Close</button>*@
-            </div>
-        </div>
+        
     </div>
 
     @*<div class="overlay" onclick="off()"></div>
@@ -164,9 +187,29 @@
 
 <script>
 
+     // $(document).ready(setTimeout(popup, 5000));
 
+     $(document).ready(function () {
+            $('#productName').change(function () {
+                var selectedProductName = $(this).val();
+                updatePrice(selectedProductName);
+            });
 
-    //  $(document).ready(setTimeout(popup, 5000));
+            function updatePrice(selectedProductName) {
+                $.ajax({
+                    url: '@Url.Action("GetPriceForProduct", "Home")',
+                    type: 'GET',
+                    data: { productName: selectedProductName },
+                    success: function (result) {
+                        $('#Price').val(result);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error fetching product price:', error);
+                    }
+                });
+            }
+        });
+
 
     document.getElementById('addbutton').addEventListener('click', function () {
         const productName = document.getElementById('productName').value;
@@ -203,9 +246,9 @@
                         });
 
 
-                    }    
+                    }
                 });
-           
+
             });
 
             tbody.appendChild(tr);
@@ -217,10 +260,4 @@
             alert('Please fill out all fields.');
         }
     });
-
-
-
-  
-
-
 </script>

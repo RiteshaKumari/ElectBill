@@ -21,22 +21,22 @@
 //        Utility us = new Utility();
 
 
-//        //private void loadbag()
-//        //{
+//private void loadbag()
+//{
 
-//        //    List<BillDetail> Res = new List<BillDetail>();
+//    List<BillDetail> Res = new List<BillDetail>();
 
-//        //    DataSet DS = us.fn_DataSet("dropdown");
-//        //    var Book = DS.Tables[0];
-//        //    var Res2 = Book.AsEnumerable().Select(s => new BillDetail
-//        //    {
-//        //        ProductId = s.Field<int>("ProductId"),
-//        //        ProdName = s.Field<string>("ProdName")
+//    DataSet DS = us.fn_DataSet("dropdown");
+//    var Book = DS.Tables[0];
+//    var Res2 = Book.AsEnumerable().Select(s => new BillDetail
+//    {
+//        ProductId = s.Field<int>("ProductId"),
+//        ProdName = s.Field<string>("ProdName")
 
 
-//        //    }).ToList();
-//        //    ViewBag.AllProduct = new SelectList(Res2, "ProductId", "ProdName");
-//        //}
+//    }).ToList();
+//    ViewBag.AllProduct = new SelectList(Res2, "ProductId", "ProdName");
+//}
 
 //        public string connectionString = ConfigurationManager.ConnectionStrings["mycon"].ConnectionString;
 

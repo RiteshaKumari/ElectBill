@@ -74,7 +74,7 @@
 <div class="cont">
     <h1>Customer Bill</h1>
 
-    <div class="box" style=" display: flex !important;  justify-content: space-between !important; padding-top: 30px !important;">
+    <div class="box">
         <div>
 
 
@@ -84,7 +84,11 @@
             <p>CustomerId : @Model.cust_Id</p>
             <p> Name : @Model.cust_Name</p>
             <p> Mobile : @Model.cust_Mobile</p>
-            <p> Address : @Model.cust_Address</p>
+            <p> Date : @Model.Date</p>
+
+        </div>
+        <div>
+            <img src="@ViewBag.QRCodeImage" style="height:200px;width:200px;" />
         </div>
         <div>
             <h4>
@@ -92,17 +96,17 @@
             </h4>
 
             <pre style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">
-      GroseryShop , Patna, Bihar
-      Phone  :  1234567890
-      email   :  abc@gmail.com 
-    </pre>
+  GroseryShop , Patna, Bihar
+  Phone  :  1234567890
+  email   :  abc@gmail.com 
+</pre>
         </div>
     </div>
 
     <table class="content-table">
-        <thead style=" background-color: #009879 !important;">
+        <thead >
 
-            <tr>
+            <tr style="background-color: #009879 !important;">
                 <th>Id</th>
                 <th>Product Name</th>
                 <th>Price</th>

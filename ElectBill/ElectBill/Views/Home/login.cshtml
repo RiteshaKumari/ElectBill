@@ -161,6 +161,7 @@
     <div class="main_div">
         <div class="title">Login Form</div>
         <p style="color:red;">@ViewBag.Messagelog</p>
+        @*@Html.ValidationSummary(true, "", new { @class = "text-danger" })*@
         @*<div class="social_icons">
             <a href="#"><i class="fa-brands fa-google"></i> <span>Google</span></a>
              <a href="#"><i class="fab fa-facebook-f"></i> <span>Facebook</span></a>
@@ -168,7 +169,6 @@
         </div>*@
         @using (Html.BeginForm("Login", "Home", FormMethod.Post))
         {
-
             @Html.AntiForgeryToken()
             <div class="input_box">
                 @Html.TextBoxFor(e => e.Email, null, new { placeholder = "Email", @class = "form-control" })
